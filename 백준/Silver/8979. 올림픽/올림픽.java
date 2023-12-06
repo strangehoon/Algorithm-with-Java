@@ -38,14 +38,14 @@ public class Main {
             public int compare(Nation o1, Nation o2) {
                 if(o1.gold==o2.gold){
                     if(o1.silver==o2.silver){
-                        return o1.bronze-o2.bronze;
+                        return o2.bronze-o1.bronze;
                     }
                     else{
-                        return o1.silver-o2.silver;
+                        return o2.silver-o1.silver;
                     }
                 }
                 else{
-                    return o1.gold-o2.gold;
+                    return o2.gold-o1.gold;
                 }
             }
         });
