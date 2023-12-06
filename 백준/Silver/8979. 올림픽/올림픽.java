@@ -10,6 +10,7 @@ public class Main {
         int silver;
         int bronze;
 
+        int rank;
         public Nation(int num, int gold, int silver, int bronze){
             this.num = num;
             this.gold = gold;
@@ -50,18 +51,23 @@ public class Main {
             }
         });
         int rank = 1;
-        if(arrayList.get(0).num==k)
+        if(arrayList.get(0).num==k){
+            arrayList.get(0).rank = rank;
             bf.write(String.valueOf(rank));
+        }
         for(int i=1; i<n; i++){
-            if((arrayList.get(i-1).gold!=arrayList.get(i).gold)||
-                    (arrayList.get(i-1).silver!=arrayList.get(i).silver) ||
-                    (arrayList.get(i-1).bronze!=arrayList.get(i).bronze)){
-                rank ++;
+            rank++;
+            if((arrayList.get(i-1).gold==arrayList.get(i).gold)&&
+                    (arrayList.get(i-1).silver==arrayList.get(i).silver)&&
+                    (arrayList.get(i-1).bronze==arrayList.get(i).bronze)){
+                arrayList.get(i).rank = arrayList.get(i-1).rank;
             }
-            if(arrayList.get(i).num==k){
-                bf.write(String.valueOf(rank));
-                break;
+            else {
+                arrayList.get(i).rank = rank;
             }
+
+            if(arrayList.get(i).num==k)
+                bf.write(String.valueOf(arrayList.get(i).rank));
         }
         bf.flush();
         bf.close();
