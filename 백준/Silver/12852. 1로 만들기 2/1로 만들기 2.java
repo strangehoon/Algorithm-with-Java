@@ -6,34 +6,31 @@ public class Main {
 
         int N = Integer.parseInt(br.readLine());
         int[] dp = new int[N+1];
-        String[] strArr = new String[N+1];
+        int[] trace = new int[N+1];
         dp[1] = 0;
-        strArr[1] = new String("1");
         for(int i=2; i<N+1; i++){
             dp[i] = dp[i-1]+1;
-            int flag = 1;
+            trace[i] = i-1;
             if(i%2==0){
                 if(dp[i]>dp[i/2]+1){
                     dp[i] = dp[i/2]+1;
-                    flag = 2;
+                    trace[i] = i/2;
                 }
             }
             if(i%3==0){
                 if(dp[i]>dp[i/3]+1){
                     dp[i] = dp[i/3]+1;
-                    flag = 3;
+                    trace[i] = i/3;
                 }
             }
-            if(flag ==1){
-                strArr[i] = i+" " + strArr[i-1];
-            } else if (flag==2) {
-                strArr[i] = i +" " + strArr[i/2];
-            }
-            else
-                strArr[i] = i+" " + strArr[i/3];
         }
         bw.write(String.valueOf(dp[N]) +"\n");
-        bw.write(String.valueOf(strArr[N]));
+        bw.write(String.valueOf(N +" "));
+        int cnt = dp[N];
+        for(int i=0; i<cnt; i++){
+            bw.write(String.valueOf(trace[N]+" "));
+            N =trace[N];
+        }
         bw.flush();
         bw.close();
         br.close();
