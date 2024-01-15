@@ -13,16 +13,14 @@ public class Main {
         for(int i=0; i<N; i++){
             pi[i] = Integer.parseInt(st.nextToken());
         }
-        
+
         // sol
         Arrays.sort(pi);
-        int[] time = new int[N];
-        time[0] = pi[0];
+        int prev = 0;
         int answer = 0;
-        answer += time[0];
-        for(int i=1; i<N; i++) {
-            time[i] = time[i - 1] + pi[i];
-            answer += time[i];
+        for(int i=0; i<N; i++) {
+            answer += pi[i] + prev;
+            prev += pi[i];
         }
 
         bw.write(String.valueOf(answer));
