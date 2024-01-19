@@ -13,12 +13,14 @@ public class Main {
             stack.push(str.charAt(i));
             int cnt = 0;
             if(stack.size()>=bombLen){
+                boolean check = true;
                 for(int j=0; j<bombLen; j++){
-                    if(stack.get(j+stack.size()-bombLen)==bomb.charAt(j)){
-                        cnt++;
+                    if(stack.get(j+stack.size()-bombLen)!=bomb.charAt(j)){
+                        check = false;
+                        break;
                     }
                 }
-                if(cnt==bombLen){
+                if(check==true){
                     for(int j=0; j<bombLen; j++){
                         stack.pop();
                     }
