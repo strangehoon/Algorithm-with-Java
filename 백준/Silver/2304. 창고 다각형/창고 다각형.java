@@ -1,51 +1,51 @@
 import java.io.*;
-import java.util.*;
+import java.util.StringTokenizer;
 
 public class Main {
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
         int N = Integer.parseInt(br.readLine());
-        int[] arr = new int[1001];
-        int max = Integer.MIN_VALUE;
-        int pos = 0;
+        int[] arr = new int[1002];
+        int lt = Integer.MAX_VALUE;
+        int rt = Integer.MIN_VALUE;
+        int max_height = Integer.MIN_VALUE;
+        int max_height_pos = -1;
         for(int i=0; i<N; i++){
             StringTokenizer st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            arr[a]=b;
-            if(max<b){
-                max = b;
-                pos = a;
+            int L = Integer.parseInt(st.nextToken());
+            int H = Integer.parseInt(st.nextToken());
+            arr[L] = H;
+            lt = Math.min(lt, L);
+            rt = Math.max(rt, L);
+            if(max_height<H){
+                max_height = H;
+                max_height_pos = L;
             }
         }
 
+        // 왼쪽 접근
+        int std = 0;
         int sum = 0;
-        int height = arr[0];
-        for(int i=1; i<=pos; i++){
-            sum += height;
-            if(i==pos)
-                break;
-            else if (arr[i]>height) {
-                height = arr[i];
+        for(int i=lt; i<max_height_pos; i++){
+            if(arr[i]>std){
+                std = arr[i];
             }
+            sum += std;
         }
 
-        height = arr[1000];
-        boolean flag = true;
-        for(int i= 1000; i>=pos; i--){
-            if(height<arr[i]){
-                height = arr[i];
-            }
-            sum += height;
+        //가운데(제일 높은 곳)
+        sum += arr[max_height_pos];
 
+        // 오른쪽 접근
+        std = 0;
+        for(int i=rt; i>max_height_pos; i--){
+            if(arr[i]>std){
+                std=arr[i];
+            }
+            sum += std;
         }
 
-        bw.write(String.valueOf(sum));
-
-        bw.flush();
-        bw.close();
-        br.close();
+        System.out.println(sum);
     }
 }
