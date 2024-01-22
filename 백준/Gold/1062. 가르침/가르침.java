@@ -11,7 +11,7 @@ public class Main {
     static List<Character> alpha;
     static List<Character> choiceAlpha;
     public static void DFS(int pos, int cnt){
-        if(cnt==Math.min(K, alpha.size()+5)){
+        if(cnt==K){
             max_value = Math.max(calculate(), max_value);
             return;
         }
@@ -64,6 +64,11 @@ public class Main {
                     alpha.add(str.charAt(j));
                 }
             }
+        }
+        // K가 지나치게 클 경우 모든 문자열을 배울 수 있음
+        if(alpha.size()+5<K) {
+            System.out.println(arr.length);
+            return;
         }
         choiceAlpha = new ArrayList<>();
         choiceAlpha.add('a');
