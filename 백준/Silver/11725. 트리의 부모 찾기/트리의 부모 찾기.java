@@ -22,6 +22,7 @@ public class Main {
     }
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         N = Integer.parseInt(br.readLine());
         visited = new boolean[N+1];
         parent = new int[N+1];
@@ -38,7 +39,10 @@ public class Main {
         }
         BFS(1);
         for(int i=2; i<=N; i++){
-            System.out.println(parent[i]);
+            bw.write(String.valueOf(parent[i])+"\n");
         }
+        bw.flush();
+        bw.close();
+        br.close();
     }
 }
