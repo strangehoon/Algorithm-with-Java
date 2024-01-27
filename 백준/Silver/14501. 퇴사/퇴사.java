@@ -14,14 +14,13 @@ public class Main {
             int T = Integer.parseInt(st.nextToken());
             int P = Integer.parseInt(st.nextToken());
 
-            for(int j=0; j<i; j++){
-                result[i] = Math.max(result[j], result[i]);
-            }
+            result[i] = Math.max(result[i-1], result[i]);
+            
             if(i+T-1<=N){
                 result[i+T-1] = Math.max(result[i-1]+P, result[i+T-1]);
             }
         }
-        
+
         bw.write(String.valueOf(result[N]));
         bw.flush();
         bw.close();
