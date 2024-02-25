@@ -12,12 +12,8 @@ public class Main {
             k--;
             if(k==0){
                 System.out.print(arr[0]);
-                for(int i=1; i<n; i++){
-                    int tem = arr[i];
-                    if(tem!=0) {
-                        System.out.print("+" + tem);
-                    }
-
+                for(int i=1; i<pos; i++){
+                    System.out.print("+" + arr[i]);
                 }
                 flag = false;
             }
