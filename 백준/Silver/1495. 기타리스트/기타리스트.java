@@ -39,7 +39,7 @@ public class Main {
         }
         if(max_result == Integer.MIN_VALUE)
             bw.write(String.valueOf(-1));
-        else
+        else 
             bw.write(String.valueOf(max_result));
 
         bw.flush();
