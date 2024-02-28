@@ -1,31 +1,44 @@
-import java.util.ArrayList;
+import java.io.*;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
-	
-	public int solution(int n, int m, int[] arr) {
-		int result = 0;
-		for(int i=0; i<n; i++) {
-			for(int j=i+1; j<n; j++) {
-				if(arr[i]+arr[j]==m) {
-					result +=1;
-				}
-			}
-		}
-		return result;
-	}
 
-	public static void main(String[] args) {
-		Main T = new Main();
-		Scanner sc = new Scanner(System.in);
-		int N = sc.nextInt();
-		int M = sc.nextInt();
-		int[] arr = new int[N];
-		for(int i=0; i<N; i++) {
-			arr[i] = sc.nextInt();
-		}
-		System.out.println(T.solution(N, M, arr));
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        int N = Integer.parseInt(br.readLine());
+        int M = Integer.parseInt(br.readLine());
+        int[] arr = new int[N];
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for(int i=0; i<N; i++){
+            arr[i] = Integer.parseInt(st.nextToken());
+        }
+        Arrays.sort(arr);
+        int i = 0;
+        int j = N-1;
+        int cnt = 0;
+        int sum = arr[i]+arr[j];
+        while (i<j){
+            if(sum<M){
+                sum -= arr[i++];
+                sum += arr[i];
+            }
+            else if (sum == M) {
+                sum -= arr[i++];
+                sum += arr[i];
+                cnt++;
+            }
+            else {
+                sum -= arr[j--];
+                sum += arr[j];
+            }
+        }
+
+        bw.write(String.valueOf(cnt));
+        bw.flush();
+        bw.close();
+        br.close();
+    }
 }
