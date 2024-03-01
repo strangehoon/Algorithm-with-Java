@@ -3,49 +3,51 @@ import java.util.*;
 
 public class Main {
     static List<List<Integer>> graph;
-
     static boolean[] visited;
-
-    static void DFS(int i){
-        visited[i] = true;
-
-        for(int j=0; j< graph.get(i).size();j++){
-            int x = graph.get(i).get(j);
-            if(!visited[x]){
-                DFS(x);
+    public static void BFS(int x){
+        Queue<Integer> queue = new LinkedList<>();
+        visited[x] = true;
+        queue.offer(x);
+        while (!queue.isEmpty()){
+            int tem = queue.poll();
+            for(Integer t : graph.get(tem)){
+                if(visited[t]==false){
+                    visited[t] = true;
+                    queue.offer(t);
+                }
             }
         }
     }
+
     public static void main(String[] args) throws IOException {
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
-        int result = 0;
+        visited = new boolean[N+1];
         graph = new ArrayList<>();
-        visited = new boolean[N];
-        for(int i=0; i<N; i++){
+        for(int i=0; i<=N; i++){
             graph.add(new ArrayList<>());
         }
-
         for(int i=0; i<M; i++){
-            StringTokenizer st2 = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st2.nextToken());
-            int b = Integer.parseInt(st2.nextToken());
-            graph.get(a-1).add(b-1);
-            graph.get(b-1).add(a-1);
+            st = new StringTokenizer(br.readLine());
+            int first = Integer.parseInt(st.nextToken());
+            int second = Integer.parseInt(st.nextToken());
+            graph.get(first).add(second);
+            graph.get(second).add(first);
         }
-
-        for(int i=0; i<N; i++){
-            if(!visited[i]){
-                DFS(i);
-                result ++;
+        int cnt = 0;
+        for(int i=1; i<=N; i++){
+            if(visited[i]==false){
+                BFS(i);
+                cnt++;
             }
         }
 
-        bw.write(String.valueOf(result));
+        bw.write(String.valueOf(cnt));
         bw.flush();
         bw.close();
         br.close();
