@@ -2,57 +2,53 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-
-    static int[] arr;
-    public static int Find(int v){
-        if(arr[v]==v){
-            return v;
-        } else {
-            return arr[v] = Find(arr[v]);
-        }
+    static int n,m;
+    static int[] parent;
+    public static int find(int x){
+        if(x==parent[x])
+            return parent[x];
+        else
+            return parent[x] = find(parent[x]);
     }
 
-    public static void Union(int v1, int v2){
-        int f1 = Find(v1);
-        int f2 = Find(v2);
-        if(f1!=f2){
-            arr[f1]= f2;
+    public static void union(int a, int b){
+        a = find(a);
+        b = find(b);
+        if(a!=b){
+            parent[b]= a;
         }
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
         StringTokenizer st = new StringTokenizer(br.readLine());
-
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
-
-        arr = new int[n+1];
-        for(int i=0; i<n+1; i++){
-            arr[i] = i;
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        parent = new int[n+1];
+        for(int i=0; i<=n; i++){
+            parent[i] = i;
         }
 
         for(int i=0; i<m; i++){
             st = new StringTokenizer(br.readLine());
-            int x = Integer.parseInt(st.nextToken());
-            int v1 = Integer.parseInt(st.nextToken());
-            int v2 = Integer.parseInt(st.nextToken());
-            if(x==0)
-                Union(v1, v2);
-            else if (x==1) {
-                int f1 = Find(v1);
-                int f2 = Find(v2);
-                if(f1==f2)
-                    bw.write(String.valueOf("YES\n"));
+            int cal = Integer.parseInt(st.nextToken());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            if(cal==0){
+                union(a, b);
+            } else if (cal==1) {
+                if(find(a)==find(b)){
+                    bw.write(String.valueOf("YES")+"\n");
+                }
                 else
-                    bw.write(String.valueOf("NO\n"));
+                    bw.write(String.valueOf("NO")+"\n");
             }
         }
-
+        
         bw.flush();
         bw.close();
         br.close();
-
     }
 }
