@@ -19,19 +19,12 @@ class Solution {
             }
         });
         StringBuilder sb = new StringBuilder();
-        boolean flag = true;
-        for(String x : strArr){
-            if(x.equals("0") && flag ==true){
-                continue;
-            }
-            else{
-                flag = false;
-                sb.append(x);
-            }
-        }
-        if(sb.toString().isEmpty())
+        if(strArr[0].equals("0"))
             return "0";
-        else
-            return sb.toString();
+
+        for(String x : strArr){
+            sb.append(x);
+        }
+        return sb.toString();
     }
 }
