@@ -9,21 +9,21 @@ class Solution {
         }
     }
     
-    public class Gen{
-        int sumPlay;
-        int index;
-        public Gen(int sumPlay, int index){
-            this.sumPlay = sumPlay;
-            this.index = index;
+    public class Genre{
+        int sumCnt;
+        int idx;
+        public Genre(int sumCnt, int idx){
+            this.sumCnt = sumCnt;
+            this.idx = idx;
         }
     }
     public List<Integer> solution(String[] genres, int[] plays) {
         HashMap<String, Integer> map = new HashMap<>();
-        List<Gen> gens = new ArrayList<>();
-        List<List<Play>> list = new ArrayList<>();
+        List<Genre> genreList = new ArrayList<>();
+        List<List<Play>> playList = new ArrayList<>();
         List<Integer> result = new ArrayList<>();
         for(int i=0; i<genres.length; i++){
-            list.add(new ArrayList<>());
+            playList.add(new ArrayList<>());
         }
         int idx = 0;
         for(int i=0; i<genres.length; i++){
@@ -32,26 +32,25 @@ class Solution {
             if(map.get(genre)==null){
                 map.put(genre, idx);
                 idx++;
-                list.add(new ArrayList<>());
             }
-            list.get(map.get(genre)).add(new Play(plays[i], i));
+            playList.get(map.get(genre)).add(new Play(plays[i], i));
         }
         for(int i=0; i<genres.length; i++){
             int sum = 0;
-            for(Play x : list.get(i)){
+            for(Play x : playList.get(i)){
                 sum += x.cnt;
             }
-            gens.add(new Gen(sum, i));
+            genreList.add(new Genre(sum, i));
         }
-        Collections.sort(gens, new Comparator<>(){
+        Collections.sort(genreList, new Comparator<>(){
             @Override
-            public int compare(Gen g1, Gen g2){
-                return g2.sumPlay - g1.sumPlay;
+            public int compare(Genre g1, Genre g2){
+                return g2.sumCnt - g1.sumCnt;
             }
         });
         
-        for(Gen g : gens){
-            List<Play> tem = list.get(g.index);
+        for(Genre g : genreList){
+            List<Play> tem = playList.get(g.idx);
             Collections.sort(tem, new Comparator<>(){
                 @Override
                 public int compare(Play p1, Play p2){
@@ -63,7 +62,6 @@ class Solution {
                     }
                 }
             });
-            
             if(tem.size()>0){
                 result.add(tem.get(0).idx);
                 if(tem.size()>1){
