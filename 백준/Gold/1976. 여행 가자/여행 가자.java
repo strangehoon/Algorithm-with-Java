@@ -1,56 +1,58 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.*;
 
 public class Main {
-    static int N,M;
-    static int[] parent;
 
-    public static void union(int a, int b){
-        a = find(a);
-        b = find(b);
-        parent[b]=a;
-    }
-    public static int find(int x){
-        if(x==parent[x]){
-            return parent[x];
-        }
-        else{
-            return parent[x] = find(parent[x]);
-        }
+    public static int[] arr;
+    public static void Union(int a, int b){
+        a = Find(a);
+        b = Find(b);
+        arr[b] = a;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static int Find(int x){
+        if(arr[x]==x)
+            return arr[x];
+        else
+            return arr[x] = Find(arr[x]);
+    }
+
+    public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        N = Integer.parseInt(br.readLine());
-        M = Integer.parseInt(br.readLine());
-        parent = new int[N];
-        for(int i=0; i<N; i++){
-            parent[i] = i;
+        int N = Integer.valueOf(st.nextToken());
+        st = new StringTokenizer(br.readLine());
+        int M = Integer.valueOf(st.nextToken());
+
+        arr = new int[N+1];
+        for(int i=1; i<=N; i++){
+            arr[i] = i;
         }
-        for(int i=0; i<N; i++){
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            for(int j=0; j<N; j++){
-                int x = Integer.parseInt(st.nextToken());
-                if(x==1){
-                    union(i, j);
+        for(int i=1; i<=N; i++){
+            st = new StringTokenizer(br.readLine());
+            for(int j=1; j<=N; j++){
+                int tem = Integer.valueOf(st.nextToken());
+                if(tem==1){
+                    Union(i, j);
                 }
             }
         }
 
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int tem = find(Integer.parseInt(st.nextToken())-1);
-        boolean flag = true;
-        while (st.hasMoreTokens()){
-            int x = Integer.parseInt(st.nextToken())-1;
-            if(tem!=find(x)){
-                flag = false;
-                break;
-            }
+        st = new StringTokenizer(br.readLine());
+        HashSet<Integer> set = new HashSet<>();
+        for(int i=0; i<M; i++){
+            int x = Integer.valueOf(st.nextToken());
+            set.add(Find(x));
         }
-        bw.write(String.valueOf(flag==true ? "YES" : "NO"));
-
+        if(set.size()==1)
+            bw.write(String.valueOf("YES"));
+        else
+            bw.write(String.valueOf("NO"));
         bw.flush();
         bw.close();
         br.close();
