@@ -1,56 +1,65 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.*;
 
 public class Main {
 
-    static int V,E;
-    static int[] visited;
-    static List<List<Integer>> graph;
-    static boolean flag;
-    public static void DFS(int x){
-        for(Integer t : graph.get(x)){
-            if(visited[t]==0){
-                visited[t] = visited[x]*-1;
-                DFS(t);
+    public static List<List<Integer>> graph;
+    public static int[] visited;
+    public static boolean result;
+    public static void DFS(int x, int flag){
+        visited[x] = flag;
+
+        for(int tem : graph.get(x)){
+            if(visited[tem]==0){
+                DFS(tem, flag*-1);
             }
-            else if(visited[t]==visited[x]){
-                flag = false;
+            else if(visited[tem]==flag){
+                result = false;
+                break;
             }
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int K = Integer.parseInt(br.readLine());
-        while (K-->0){
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            V = Integer.parseInt(st.nextToken());
-            E = Integer.parseInt(st.nextToken());
-            graph = new ArrayList<>();
+        int T = Integer.valueOf(st.nextToken());
+        while(T-->0){
+            st = new StringTokenizer(br.readLine());
+            int V = Integer.valueOf(st.nextToken());
+            int E = Integer.valueOf(st.nextToken());
             visited = new int[V+1];
-            flag = true;
+            graph = new ArrayList<>();
+            result = true;
             for(int i=0; i<=V; i++){
                 graph.add(new ArrayList<>());
             }
+
             for(int i=0; i<E; i++){
                 st = new StringTokenizer(br.readLine());
-                int u = Integer.parseInt(st.nextToken());
-                int v = Integer.parseInt(st.nextToken());
-                graph.get(u).add(v);
-                graph.get(v).add(u);
+                int a = Integer.valueOf(st.nextToken());
+                int b = Integer.valueOf(st.nextToken());
+                graph.get(a).add(b);
+                graph.get(b).add(a);
             }
+
             for(int i=1; i<=V; i++){
-                if(flag==false)
-                    break;
                 if(visited[i]==0){
-                    visited[i] = 1;
-                    DFS(i);
+                    DFS(i, 1);
+                    if(result==false){
+                        break;
+                    }
                 }
             }
-            String result = flag == true ? "YES" : "NO";
-            bw.write(String.valueOf(result)+"\n");
+            if(result==true)
+                bw.write(String.valueOf("YES")+"\n");
+            else
+                bw.write(String.valueOf("NO")+"\n");
         }
 
         bw.flush();
