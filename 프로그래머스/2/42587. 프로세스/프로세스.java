@@ -1,9 +1,8 @@
 import java.util.*;
 class Solution {
-    public class Process {
+    public class Process{
         int priority;
         int loc;
-        
         public Process(int priority, int loc){
             this.priority = priority;
             this.loc = loc;
@@ -11,32 +10,37 @@ class Solution {
     }
     public int solution(int[] priorities, int location) {
         Queue<Process> queue = new LinkedList<>();
+        int answer = -1;
+        int order = 0;
         for(int i=0; i<priorities.length; i++){
             queue.offer(new Process(priorities[i], i));
         }
-        int cnt = 1;
-        while(!queue.isEmpty()){
-            Process nowProc = queue.poll();
-            boolean flag = true;
+        
+        while(true){
+            Process process = queue.peek();
+            int pt = process.priority;
             int size = queue.size();
-            while(size-->0){
-                Process temProc = queue.poll();
-                if(temProc.priority > nowProc.priority){
+            boolean flag = true;
+            for(int i=0; i<size; i++){
+                Process tem = queue.poll();
+                int temPt = tem.priority;
+                if(temPt>pt){
                     flag = false;
                 }
-                queue.offer(temProc);
+                queue.offer(tem);
             }
-            if(flag==false){
-                queue.offer(nowProc);
+            if(flag==true){
+                Process dummy = queue.poll();
+                order++;
+                if(dummy.loc == location){
+                    answer = order;
+                    break;
+                }
             }
-            else if(flag==true && nowProc.loc==location){
-                return cnt;
-            }
-            else if(flag==true){
-                cnt++;
+            else if(flag==false){
+                queue.offer(queue.poll());
             }
         }
-    
-        return cnt;
+        return answer;
     }
 }
