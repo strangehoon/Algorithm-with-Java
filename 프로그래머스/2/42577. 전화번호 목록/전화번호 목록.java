@@ -1,39 +1,40 @@
 import java.util.*;
 class Solution {
     public boolean solution(String[] phone_book) {
-        Arrays.sort(phone_book);
-        HashSet<String> set = new HashSet<>();
+        int len = phone_book.length;
+        HashSet<String> set1 = new HashSet<>();
         HashSet<String> set2 = new HashSet<>();
-        boolean flag = true;
-        for(int i=0; i<phone_book.length; i++){
-            int len = phone_book[i].length();
-            for(int j=1; j<=len; j++){
-                String temStr = phone_book[i].substring(0, j);
-                if(set.contains(temStr)){
+        for(int i=0; i<len; i++){
+            String str = phone_book[i];
+            boolean flag = true;
+            for(int j=0; j<str.length(); j++){
+                String tem = str.substring(0, j+1);
+                if(set1.contains(tem)){
                     flag = false;
                     break;
                 }
             }
-            if(flag==false){
-                break;
-            }
-            set.add(phone_book[i]);
+            if(flag)
+                set1.add(str);
         }
-        Arrays.sort(phone_book, Collections.reverseOrder());
-        for(int i=0; i<phone_book.length; i++){
-            int len = phone_book[i].length();
-            for(int j=1; j<=len; j++){
-                String temStr = phone_book[i].substring(0, j);
-                if(set2.contains(temStr)){
+
+        for(int i=len-1; i>=0; i--){
+            String str = phone_book[i];
+            boolean flag = true;
+            for(int j=0; j<str.length(); j++){
+                String tem = str.substring(0, j+1);
+                if(set2.contains(tem)){
                     flag = false;
                     break;
                 }
             }
-            if(flag==false){
-                break;
-            }
-            set2.add(phone_book[i]);
+            if(flag)
+                set2.add(str);
         }
-        return flag;
+        if(set1.size()==len && set2.size()==len)
+            return true;
+        else
+            return false;
+        
     }
 }
