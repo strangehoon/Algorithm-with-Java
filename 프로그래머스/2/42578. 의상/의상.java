@@ -2,14 +2,17 @@ import java.util.*;
 class Solution {
     public int solution(String[][] clothes) {
         HashMap<String, Integer> map = new HashMap<>();
-        for(String[] clo : clothes){
-            map.put(clo[1], map.getOrDefault(clo[1], 0)+1);
+        int len = clothes.length;
+        for(int i=0; i<len; i++){
+            String type = clothes[i][1];
+            map.put(type, map.getOrDefault(type, 0)+1);
         }
-        Set<String> set = map.keySet();
+        Set<String> keySet = map.keySet();
         int result = 1;
-        for(String x : set){
-            result *= (map.get(x)+1);
+        for(String str : keySet){
+            result *= (map.get(str)+1);
         }
-        return result-1;
+        result -= 1;
+        return result;
     }
 }
