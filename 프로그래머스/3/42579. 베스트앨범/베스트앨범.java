@@ -1,74 +1,81 @@
 import java.util.*;
 class Solution {
-    public class Play{
-        int cnt;
-        int idx;
-        public Play(int cnt, int idx){
-            this.cnt = cnt;
-            this.idx = idx;
+    public class Genre implements Comparable<Genre>{
+        String name;
+        int sum;
+        
+        public Genre(String name, int sum) {
+            this.name = name;
+            this.sum = sum;
+        }
+        
+        @Override
+        public int compareTo(Genre genre){
+            return genre.sum-this.sum;
         }
     }
     
-    public class Genre{
-        int sumCnt;
+    public class Song implements Comparable<Song>{
         int idx;
-        public Genre(int sumCnt, int idx){
-            this.sumCnt = sumCnt;
+        int num;
+        
+        public Song(int idx, int num){
             this.idx = idx;
+            this.num = num;
+        }
+        
+        @Override
+        public int compareTo(Song song){
+            if(this.num==song.num){
+                return this.idx - song.idx;
+            }
+            else{
+                return song.num - this.num;
+            }
         }
     }
+    
     public List<Integer> solution(String[] genres, int[] plays) {
         HashMap<String, Integer> map = new HashMap<>();
+        for(int i=0; i<genres.length; i++){
+            map.put(genres[i], map.getOrDefault(genres[i], 0)+plays[i]);
+        }
         List<Genre> genreList = new ArrayList<>();
-        List<List<Play>> playList = new ArrayList<>();
-        List<Integer> result = new ArrayList<>();
-        for(int i=0; i<genres.length; i++){
-            playList.add(new ArrayList<>());
+        for(String str : map.keySet()){
+            genreList.add(new Genre(str, map.get(str)));
         }
-        int idx = 0;
-        for(int i=0; i<genres.length; i++){
-            String genre = genres[i];
-            int play = plays[i];
-            if(map.get(genre)==null){
-                map.put(genre, idx);
-                idx++;
-            }
-            playList.get(map.get(genre)).add(new Play(plays[i], i));
-        }
-        for(int i=0; i<genres.length; i++){
-            int sum = 0;
-            for(Play x : playList.get(i)){
-                sum += x.cnt;
-            }
-            genreList.add(new Genre(sum, i));
-        }
-        Collections.sort(genreList, new Comparator<>(){
-            @Override
-            public int compare(Genre g1, Genre g2){
-                return g2.sumCnt - g1.sumCnt;
-            }
-        });
+        Collections.sort(genreList);
         
-        for(Genre g : genreList){
-            List<Play> tem = playList.get(g.idx);
-            Collections.sort(tem, new Comparator<>(){
-                @Override
-                public int compare(Play p1, Play p2){
-                    if(p1.cnt==p2.cnt){
-                        return p1.idx - p2.idx;
-                    }
-                    else{
-                        return p2.cnt - p1.cnt;
-                    }
-                }
-            });
-            if(tem.size()>0){
-                result.add(tem.get(0).idx);
-                if(tem.size()>1){
-                   result.add(tem.get(1).idx);
+        List<List<Song>> songList = new ArrayList<>();
+        for(int i=0; i<genreList.size(); i++){
+            songList.add(new ArrayList<>());
+        }
+        
+        for(int i=0; i<plays.length; i++){
+            String name = genres[i];
+            for(int j=0; j<genreList.size(); j++){
+                if(genreList.get(j).name.equals(name)){
+                    songList.get(j).add(new Song(i, plays[i]));
                 }
             }
         }
-        return result;
+        
+        for(int i=0; i<songList.size(); i++){
+            Collections.sort(songList.get(i));
+        }
+        
+        int idx = 0;
+        List<Integer> answer = new ArrayList<>();
+        
+        for(int i=0; i<genreList.size(); i++){
+            for(int j=0; j<songList.get(i).size(); j++){
+                if(j==2){
+                    break;
+                }
+                answer.add(songList.get(i).get(j).idx);
+            }
+        }
+        
+        return answer;
     }
 }
