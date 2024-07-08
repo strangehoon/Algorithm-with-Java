@@ -2,6 +2,13 @@ import java.util.*;
 class Solution {
     public int[] solution(String[] operations) {
         HashMap<Integer, Integer> map = new HashMap<>();
+        Integer[] arr = new Integer[5];
+        Arrays.sort(arr, new Comparator<Integer>(){
+            @Override
+            public int compare(Integer o1, Integer o2){
+                return o1-o2;
+            }
+        });
         PriorityQueue<Integer> maxHp = new PriorityQueue<Integer>(new Comparator<Integer>(){
             @Override
             public int compare(Integer o1, Integer o2){
