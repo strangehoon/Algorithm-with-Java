@@ -1,16 +1,15 @@
-import java.util.*;
 class Solution {
     public int[] solution(int brown, int yellow) {
-        int[] answer = new int[2];
-        for(int i=1; i<= Math.sqrt(yellow); i++){
-            int length = i;
-            int wide = yellow/i;
-            if((length+2)*(wide+2)-yellow==brown){
-                answer[0] = wide+2;
-                answer[1] = length+2;
+        int area = brown+yellow;
+        int[] result = new int[2];
+        for(int i=3; i<=area; i++){
+            int j = area/i;
+            if((i-2)*(j-2)==yellow){
+                result[0] = j;
+                result[1] = i;
+                break;
             }
         }
-    
-        return answer;
+        return result;
     }
 }
