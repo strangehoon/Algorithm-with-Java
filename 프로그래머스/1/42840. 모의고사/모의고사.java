@@ -1,40 +1,38 @@
 import java.util.*;
 class Solution {
     public List<Integer> solution(int[] answers) {
-        int[] first = {1, 2, 3, 4, 5};
-        int[] second = {2, 1, 2, 3, 2, 4, 2, 5};
-        int[] third = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
+        int[] first_person = {1, 2, 3, 4, 5};
+        int[] second_person = {2, 1, 2, 3, 2, 4, 2, 5};
+        int[] third_person = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
         
-        int firstCnt = 0;
-        int secondCnt = 0;
-        int thirdCnt = 0;
+        int first_cnt = 0;
+        int second_cnt = 0;
+        int third_cnt = 0;
         
+        List<Integer> list = new ArrayList<>();
+        List<Integer> resultList = new ArrayList<>();
         for(int i=0; i<answers.length; i++){
-            if(first[i%first.length]==answers[i]){
-                firstCnt++;
+            if(first_person[i%first_person.length]==answers[i]){
+                first_cnt++;
             }
-            if(second[i%second.length]==answers[i]){
-                secondCnt++;
+            if(second_person[i%second_person.length]==answers[i]){
+                second_cnt++;
             }
-            if(third[i%third.length]==answers[i]){
-                thirdCnt++;
+            if(third_person[i%third_person.length]==answers[i]){
+                third_cnt++;
+            }
+        }
+        list.add(first_cnt);
+        list.add(second_cnt);
+        list.add(third_cnt);
+        
+        int max_value = Math.max(first_cnt, Math.max(second_cnt, third_cnt));
+        for(int i=0; i<3; i++){
+            if(list.get(i)==max_value){
+                resultList.add(i+1);
             }
         }
         
-        int std = 0;
-        std = Math.max(firstCnt, secondCnt);
-        std = Math.max(std, thirdCnt);
-        List<Integer> result = new LinkedList<>();
-        if(std==firstCnt){
-            result.add(1);
-        }
-        if(std==secondCnt){
-            result.add(2);
-        }
-        if(std==thirdCnt){
-            result.add(3);
-        }
-        
-        return result;
+        return resultList;
     }
 }
