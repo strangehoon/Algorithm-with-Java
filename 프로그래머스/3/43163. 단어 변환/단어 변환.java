@@ -1,47 +1,47 @@
+import java.util.*;
 class Solution {
-    public String begin;
-    public String target;
-    public String[] words;
-    public boolean[] visited;
-    public int len;
-    public int result = 0;
+    int len;
+    boolean[] visited;
+    String[] words;
+    String target;
+    int result = Integer.MAX_VALUE;
     
     public void DFS(String str, int cnt){
         if(str.equals(target)){
-            if(result==0){
-                result = cnt;
-            }
-            else{
-                result = Math.min(result, cnt);
-            }
-            return;
+            result = Math.min(result, cnt);
         }
-        
-        for(int i=0; i<words.length; i++){
-            int flag = 1;
-            for(int j=0; j<len; j++){
-                if(words[i].charAt(j)!=str.charAt(j)){
-                    flag--;
-                }
-            }
-            if(flag == 0 && visited[i]==false){
+        for(int i=0; i<len; i++){
+            if(visited[i] ==false && CompareStr(str, words[i])){
                 visited[i] = true;
                 DFS(words[i], cnt+1);
                 visited[i] = false;
             }
         }
-        
-        
+    }
+    
+    public boolean CompareStr(String a, String b){
+        int cnt = 0;
+        for(int i=0; i<a.length(); i++){
+            if(a.charAt(i)!=b.charAt(i)){
+                cnt++;
+            }
+        }
+        if(cnt==1)
+            return true;
+        else
+            return false;
     }
     
     public int solution(String begin, String target, String[] words) {
-        this.begin = begin;
-        this.target = target;
+        len = words.length;
+        visited = new boolean[len];
         this.words = words;
-        this.len = begin.length();
-        this.visited = new boolean[words.length];
+        this.target = target;
         
         DFS(begin, 0);
-        return result;
+        if(result==Integer.MAX_VALUE)
+            return 0;
+        else
+            return result;
     }
 }
