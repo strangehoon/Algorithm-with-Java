@@ -2,74 +2,69 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
 import java.util.*;
 
 public class Main {
-    public static class Edge {
-        int vertex;
-        int cost;
-        public Edge(int vertex, int cost){
-            this.vertex = vertex;
-            this.cost = cost;
+
+    public static class Edge{
+        int start;
+        int end;
+        int value;
+
+        public Edge(int start, int end, int value){
+            this.start = start;
+            this.end = end;
+            this.value = value;
         }
     }
 
     public static void main(String[] args) throws Exception{
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.valueOf(st.nextToken());
         int M = Integer.valueOf(st.nextToken());
-        long[] dist = new long[N+1];
-        long[] temDist = new long[N+1];
-        for(int i=1; i<=N; i++){
-            dist[i] = Integer.MAX_VALUE;
-        }
-        dist[1] = 0;
-        List<List<Edge>> graph = new ArrayList<>();
+
+        Long[] dist = new Long[N+1];
         for(int i=0; i<=N; i++){
-            graph.add(new ArrayList<>());
+            dist[i] = Long.MAX_VALUE;
         }
+        dist[1] = 0l;
+        List<Edge> list = new ArrayList<>();
         for(int i=0; i<M; i++){
             st = new StringTokenizer(br.readLine());
-            int A = Integer.valueOf(st.nextToken());
-            int B = Integer.valueOf(st.nextToken());
-            int C = Integer.valueOf(st.nextToken());
-            graph.get(A).add(new Edge(B, C));
+            int s = Integer.valueOf(st.nextToken());
+            int e = Integer.valueOf(st.nextToken());
+            int v = Integer.valueOf(st.nextToken());
+            list.add(new Edge(s, e, v));
         }
-
-        for(int i=0; i<=M; i++){
-            for(int j=1; j<=N; j++){
-                if(dist[j]!=Integer.MAX_VALUE){
-                    for(Edge tem : graph.get(j)){
-                        if(dist[tem.vertex]>dist[j]+tem.cost){
-                            dist[tem.vertex] = dist[j] + tem.cost;}
+        int cnt = 0;
+        boolean flag = true;
+        while(cnt<N){
+            for(int i=0; i<M; i++){
+                Edge edge = list.get(i);
+                if(dist[edge.start]!=Long.MAX_VALUE && dist[edge.end]>dist[edge.start]+edge.value){
+                    dist[edge.end] = dist[edge.start] + edge.value;
+                    if(cnt==N-1){
+                        flag = false;
                     }
                 }
             }
-            if(i==M-1){
-                for(int k=1; k<=N; k++){
-                    temDist[k] = dist[k];
-                }
-            }
+            cnt++;
         }
-        boolean flag = true;
-        for(int i=1; i<=N; i++){
-            if(temDist[i]!=dist[i])
-                flag = false;
-        }
-
-        if(flag == false){
-            bw.write(String.valueOf(-1));
-        }
-        else{
+        if(flag == true){
             for(int i=2; i<=N; i++){
-                if(dist[i]==Integer.MAX_VALUE)
+                if(dist[i]==Long.MAX_VALUE)
                     bw.write(String.valueOf(-1)+"\n");
                 else
                     bw.write(String.valueOf(dist[i])+"\n");
             }
         }
+        else
+            bw.write(String.valueOf(-1));
 
         bw.flush();
         bw.close();
