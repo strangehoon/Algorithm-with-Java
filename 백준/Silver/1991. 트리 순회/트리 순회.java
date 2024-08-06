@@ -1,67 +1,69 @@
-import java.io.*;
-import java.util.StringTokenizer;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.util.*;
 
 public class Main {
 
-    public static class Node{
-        char data;
-        Node leftChild;
-        Node rightChild;
-        public Node(char data){
-            this.data = data;
-        }
+    public static int[][] arr;
+
+    public static void preOrder(int x){
+        if(x==-1)
+            return;
+        System.out.print((char)(x+'A'));
+        preOrder(arr[x][0]);
+        preOrder(arr[x][1]);
     }
 
-    public static void preorder(Node node){
-        if(node==null)
+    public static void inOrder(int x){
+        if(x==-1)
             return;
-        System.out.print(node.data);
-        preorder(node.leftChild);
-        preorder(node.rightChild);
+        inOrder(arr[x][0]);
+        System.out.print((char)(x+'A'));
+        inOrder(arr[x][1]);
     }
 
-    public static void inorder(Node node){
-        if(node==null)
+    public static void postOrder(int x){
+        if(x==-1)
             return;
-        inorder(node.leftChild);
-        System.out.print(node.data);
-        inorder(node.rightChild);
+        postOrder(arr[x][0]);
+        postOrder(arr[x][1]);
+        System.out.print((char)(x+'A'));
     }
 
-    public static void postorder(Node node){
-        if(node==null)
-            return;
-        postorder(node.leftChild);
-        postorder(node.rightChild);
-        System.out.print(node.data);
-    }
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        int N = Integer.parseInt(br.readLine());
-        Node[] nodes = new Node[N+1];
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.valueOf(st.nextToken());
+        arr = new int[26][2];
+
         for(int i=0; i<N; i++){
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            char parentValue = st.nextToken().charAt(0);
-            char leftValue = st.nextToken().charAt(0);
-            char rightValue = st.nextToken().charAt(0);
-            if(nodes[parentValue-'A'+1]==null){
-                nodes[parentValue-'A'+1]=new Node(parentValue);
-            }
-            if(leftValue!='.'){
-                nodes[leftValue-'A'+1] = new Node(leftValue);
-                nodes[parentValue-'A'+1].leftChild = nodes[leftValue-'A'+1];
-            }
-            if(rightValue!='.'){
-                nodes[rightValue-'A'+1]= new Node(rightValue);
-                nodes[parentValue-'A'+1].rightChild = nodes[rightValue-'A'+1];
-            }
+            st = new StringTokenizer(br.readLine());
+            int node = st.nextToken().charAt(0)-'A';
+            char left = st.nextToken().charAt(0);
+            char right = st.nextToken().charAt(0);
+            if(left=='.')
+                arr[node][0] = -1;
+            else
+                arr[node][0] = left-'A';
+            if(right=='.')
+                arr[node][1] = -1;
+            else
+                arr[node][1] = right-'A';
         }
 
-        preorder(nodes[1]);
+        preOrder(0);
         System.out.println();
-        inorder(nodes[1]);
+        inOrder(0);
         System.out.println();
-        postorder(nodes[1]);
+        postOrder(0);
+
+        bw.flush();
+        bw.close();
+        br.close();
     }
 }
