@@ -1,4 +1,3 @@
-// 1:00
 import java.util.*;
 class Solution {
     public int[] solution(String[] gems) {
@@ -39,10 +38,6 @@ class Solution {
                 answer[1] = gems.length;    
             }
         }
-        // if(answer[0]==0 && answer[1]==0){
-        //     answer[0] = left+1;
-        //     answer[1] = gems.length; 
-        // }
         return answer;
     }
 }
