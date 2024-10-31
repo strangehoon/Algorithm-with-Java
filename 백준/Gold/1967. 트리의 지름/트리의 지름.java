@@ -22,10 +22,9 @@ public class Main {
 
     public static void BFS(int x){
         distance = new int[N+1];
-        for(int i=1; i<=N; i++){
-            distance[i] = -1;
-        }
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        Arrays.fill(distance, -1);
+
+        Queue<Integer> pq = new LinkedList<>();
         pq.offer(x);
         distance[x] = 0;
 
@@ -72,11 +71,9 @@ public class Main {
         }
 
         BFS(maxVertex);
-        maxVertex = Integer.MIN_VALUE;
         maxDistance = Integer.MIN_VALUE;
         for(int i=1; i<=N; i++){
             if(distance[i]>maxDistance){
-                maxVertex = i;
                 maxDistance = distance[i];
             }
         }
