@@ -11,46 +11,50 @@ public class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         int N = Integer.valueOf(br.readLine());
-        int[] arr = new int[N];
-        String[] strDP = new String[N];
-        int[] dp = new int[N];
+        int[] arr = new int[N+1];
+        int[] parent = new int[N+1];
+        int[] dp = new int[N+1];
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        for(int i=0; i<N; i++){
+        for(int i=1; i<=N; i++){
             arr[i] = Integer.valueOf(st.nextToken());
         }
 
-        for(int i=0; i<N; i++){
+        for(int i=1; i<=N; i++){
             int max_value = 0;
-            StringBuilder sb = new StringBuilder();
-            for(int j=0; j<i; j++){
+            for(int j=1; j<i; j++){
                 if(arr[i]>arr[j]) {
                     if(max_value<dp[j]){
                         max_value = dp[j];
-                        sb.setLength(0);
-                        sb.append(strDP[j]);
+                        parent[i] = j;
                     }
                 }
             }
             dp[i] = max_value+1;
-            if(i==0)
-                strDP[i] = "" + arr[i];
-            else
-                strDP[i] = sb.toString() + " " + arr[i];
         }
 
         int max_idx = 0;
         int max_len = 0;
-        for(int i=0; i<N; i++){
+        for(int i=1; i<=N; i++){
             if(max_len<dp[i]){
                 max_idx = i;
                 max_len = dp[i];
             }
         }
 
-        bw.write(String.valueOf(max_len)+"\n");
-        bw.write(strDP[max_idx]);
+        StringBuilder sb = new StringBuilder();
+        while(true){
+            if(parent[max_idx]!=max_idx){
+                sb.insert(0, arr[max_idx]+" ");
+                max_idx = parent[max_idx];
+            }
+            else{
+                break;
+            }
+        }
 
+        bw.write(String.valueOf(max_len)+"\n");
+        bw.write(sb.toString());
         bw.flush();
         bw.close();
         br.close();
