@@ -1,41 +1,55 @@
-
 import java.util.*;
+
+class Pos{
+    int x;
+    int y;
+    int d;
+    
+    public Pos(int x, int y, int d){
+        this.x = x;
+        this. y = y;
+        this.d = d;
+    }
+}
+
 class Solution {
     
-    public int[] dx = {0, 0, 1, -1};
-    public int[] dy = {1, -1, 0, 0};
-    public class Point{
-        int x;
-        int y;
-        public Point(int x, int y){
-            this.x = x;
-            this.y = y;
-        }
-    }
+    int[] dx = {0, 0, 1, -1};
+    int[] dy = {1, -1, 0, 0};
+    int[][] maps;
+    boolean[][] visited;
     
     public int solution(int[][] maps) {
-        int n = maps.length;
-        int m = maps[0].length;
-        int[][] dist = new int[n][m];
-        Queue<Point> queue = new LinkedList<>();
-        queue.offer(new Point(0, 0));
-        dist[0][0] = 1;
+        this.maps = maps;
+        this.visited = new boolean[maps.length][maps[0].length];
+        
+        Queue<Pos> queue = new LinkedList<>();
+        queue.offer(new Pos(0, 0, 1));
+        visited[0][0] = true;
+        
         while(!queue.isEmpty()){
-            Point point = queue.poll();
-            if(point.x==n-1 && point.y==m-1){
-                return dist[n-1][m-1];
+            Pos nowPos = queue.poll();
+            int nowX = nowPos.x;
+            int nowY = nowPos.y;
+            int nowD = nowPos.d;
+            
+            if(nowX==maps.length-1 && nowY==maps[0].length-1){
+                return nowD;
             }
+            
+            
             for(int i=0; i<4; i++){
-                int nx = point.x + dx[i];
-                int ny = point.y + dy[i];
-                if(0<=nx && nx<n && 0<=ny && ny<m){
-                    if(maps[nx][ny]==1 && dist[nx][ny]==0){
-                        dist[nx][ny] = dist[point.x][point.y] + 1;
-                        queue.offer(new Point(nx, ny));
-                    }
-                }
-            }    
+                int nx = nowX + dx[i];
+                int ny = nowY + dy[i];
+                if(0<=nx && nx<maps.length && 0<=ny && ny<maps[0].length){
+                    if(maps[nx][ny]==1 && visited[nx][ny]==false){
+                        visited[nx][ny] = true;
+                        queue.offer(new Pos(nx, ny, nowD+1));
+                    }    
+                }    
+            }
         }
+        
         return -1;
     }
 }
