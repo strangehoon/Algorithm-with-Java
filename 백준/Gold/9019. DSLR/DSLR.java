@@ -18,14 +18,19 @@ public class Main {
 
             Queue<Integer> queue = new LinkedList<>();
             queue.offer(A);
-            String[] commandArr = new String[10000];
-            commandArr[A] = "";
+            int[] idxArr = new int[10000];
+            Arrays.fill(idxArr, -1);
+            char[] chArr = new char[10000];
+            Stack<Character> stack = new Stack<>();
 
             while (!queue.isEmpty()){
                 int n = queue.poll();
 
                 if(n==B){
-                    bw.write(commandArr[n]+"\n");
+                    while (n!=A){
+                        stack.push(chArr[n]);
+                        n = idxArr[n];
+                    }
                     break;
                 }
 
@@ -40,26 +45,32 @@ public class Main {
                 int lN = Integer.valueOf(strN.substring(1, 4) + strN.substring(0, 1));
                 int rN = Integer.valueOf(strN.substring(3, 4)+ strN.substring(0, 3));
 
-                if(commandArr[dN]==null){
-                    commandArr[dN] = commandArr[n]+"D";
+                if(idxArr[dN]==-1){
+                    idxArr[dN] = n;
+                    chArr[dN] = 'D';
                     queue.offer(dN);
                 }
-                if(commandArr[sN]==null){
-                    commandArr[sN] = commandArr[n]+"S";
+                if(idxArr[sN]==-1){
+                    idxArr[sN] = n;
+                    chArr[sN] = 'S';
                     queue.offer(sN);
                 }
-                if(commandArr[lN]==null){
-                    commandArr[lN] = commandArr[n]+"L";
+                if(idxArr[lN]==-1){
+                    idxArr[lN] = n;
+                    chArr[lN] = 'L';
                     queue.offer(lN);
                 }
-                if(commandArr[rN]==null){
-                    commandArr[rN] = commandArr[n]+"R";
+                if(idxArr[rN]==-1){
+                    idxArr[rN] = n;
+                    chArr[rN] = 'R';
                     queue.offer(rN);
-
                 }
             }
-
-
+            int len = stack.size();
+            while (len-- > 0) {
+                bw.write(String.valueOf(stack.pop()));
+            }
+            bw.write("\n");
         }
 
         bw.flush();
