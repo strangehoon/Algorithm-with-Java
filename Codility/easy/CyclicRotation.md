@@ -1,5 +1,5 @@
 >  문제 : [CyclicRotation](https://app.codility.com/programmers/lessons/2-arrays/cyclic_rotation/) </br>
-유형 : Lesson 1(Arrays) </br>
+유형 : Lesson 2(Arrays) </br>
 
 # CyclicRotation
 
