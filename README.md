@@ -13,3 +13,13 @@ N진법 to 10진법 변환할 때
 정규표현식을 활용해 문자열을 가공하자. </br>
 -> String replaceAll(String regex, String replacement)
 > [java replace 와 replaceAll 차이점에 대해 자세히 알아보자](https://djusti.tistory.com/8)
+
+
+</br>
+
+### 3. int와 long
+int a=100000; </br>
+int b=100000; </br>
+int sum = a\*b; --> 오버플로우 </br>
+long sum = a\*b; --> 오버플로우 </br>
+long sum = (long)a*b; --> 정상 </br>
