@@ -2,7 +2,9 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -12,45 +14,33 @@ public class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         int N = Integer.valueOf(br.readLine());
-        int[] arr = new int[N];
-        HashMap<Integer, Integer> map = new HashMap<>();
+        final int INF = Integer.MAX_VALUE;
+        int[] arr = new int[1000001];
+
+        Arrays.fill(arr, Integer.MAX_VALUE);
+        List<Integer> list = new ArrayList<>();
 
         StringTokenizer st = new StringTokenizer(br.readLine());
         for(int i=0; i<N; i++){
-            arr[i] = Integer.valueOf(st.nextToken());
-            map.put(arr[i], 0);
+            int num = Integer.valueOf(st.nextToken());
+            arr[num] = 0;
+            list.add(num);
         }
 
-        for(int i=0; i<N; i++){
-            int num = arr[i];
-            for(int j=1; j<=Math.sqrt(num); j++){
-                if(num%j!=0)
-                    continue;
-                int a = j;
-                int b = num/j;
-                if(a!=b){
-                    if(map.containsKey(a)){
-                        map.put(a, map.get(a)+1);
-                        map.put(num, map.get(num)-1);
-                    }
-                    if(map.containsKey(b)){
-                        map.put(b, map.get(b)+1);
-                        map.put(num, map.get(num)-1);
-                    }
-                }
-                else{
-                    if(map.containsKey(a)){
-                        map.put(a, map.get(a)+1);
-                        map.put(num, map.get(num)-1);
+        for(int i=1; i<=1000000; i++){
+            if(arr[i]!=INF){
+                for(int j=i+i; j<=1000000; j+=i){
+                    if(arr[j]!=INF){
+                        arr[i]++;
+                        arr[j]--;
                     }
                 }
             }
         }
 
-        for(int i=0; i<N; i++){
-            bw.write(String.valueOf(map.get(arr[i]))+" ");
+        for(int i=0; i<list.size(); i++){
+            bw.write(String.valueOf(arr[list.get(i)])+" ");
         }
-
 
         bw.flush();
         bw.close();
