@@ -35,10 +35,7 @@ public class Main {
     }
 
     public static int newInOrder(int x, int cnt, int end){
-
-        if(!flag)
-            return cnt;
-
+        
         Node node = tree[x];
         int left = node.left;
         int right = node.right;
@@ -75,7 +72,7 @@ public class Main {
             tree[a] = new Node(b, c);
         }
         inOrder(1);
-        
+
         int cnt = newInOrder(1, 0, orderList.get(orderList.size()-1));
 
         bw.write(String.valueOf(cnt));
