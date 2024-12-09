@@ -20,22 +20,20 @@ public class Main {
             arr[i] = Integer.valueOf(st.nextToken());
         }
 
-        int cnt = 0;
-        int idx = -1;
+        int oddCnt = 0;
+        int lastOddIdx = -1;
         int len = 0;
         for(int i=0; i<n; i++){
             if(arr[i]%2==0)
-                len = Math.max(len, i-idx-cnt);
+                len = Math.max(len, i-lastOddIdx-oddCnt);
             else{
-                cnt++;
-                if(cnt>k){
-                    for(int j=idx+1; j<=i; j++){
-                        if(arr[j]%2!=0){
-                            cnt--;
-                            idx = j;
-                            break;
-                        }
+                oddCnt++;
+                if(oddCnt>k){
+                    lastOddIdx++;
+                    while(arr[lastOddIdx]%2==0){
+                        lastOddIdx++;
                     }
+                    oddCnt--;
                 }
             }
         }
