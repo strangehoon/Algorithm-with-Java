@@ -3,7 +3,7 @@ import java.util.*;
 class Solution {
     
     public boolean checkPrime(String chunkStr){
-        if(chunkStr.equals("") || chunkStr.equals("1"))
+        if(chunkStr.isEmpty() || chunkStr.equals("1"))
             return false;
         long chunkNum = Long.valueOf(chunkStr);
         
@@ -17,7 +17,6 @@ class Solution {
     
     public int solution(int n, int k) {
         String radixNum = Integer.toString(n, k);
-        System.out.println(radixNum);
         int len = radixNum.length();
         
         int idx = 0;
