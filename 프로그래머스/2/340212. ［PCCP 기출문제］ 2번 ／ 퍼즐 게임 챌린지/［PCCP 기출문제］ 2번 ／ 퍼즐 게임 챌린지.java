@@ -13,7 +13,7 @@ class Solution {
                     totalTime += times[i];
                 }
                 else{
-                    totalTime +=  (diffs[i]-level)*(times[i]+times[i-1])+times[i];
+                    totalTime +=  (long)(diffs[i]-level)*(times[i]+times[i-1])+times[i];
                 }
             }
             
