@@ -1,12 +1,12 @@
 class Solution {
     public int solution(int[] diffs, int[] times, long limit) {
         
-        int lt = 1;
-        int rt = 300000;
-        int answer = 300000;
+        int low = 1;
+        int high = 100000;
+        int answer = high;
         
-        while(lt<=rt){
-            int level = (lt+rt)/2;
+        while(low<=high){
+            int level = (low+high)/2;
             long totalTime = 0;
             for(int i=0; i<diffs.length; i++){
                 if(diffs[i]<=level || i==0){
@@ -18,10 +18,10 @@ class Solution {
             }
             
             if(totalTime>limit){
-                lt = level+1;
+                low = level+1;
             }
             else{
-                rt = level-1;
+                high = level-1;
                 answer = Math.min(answer, level);
             }
         }
