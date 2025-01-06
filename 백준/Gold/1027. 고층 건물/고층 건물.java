@@ -6,19 +6,22 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        
-        int n = Integer.valueOf(br.readLine());
+
+        int n = Integer.parseInt(br.readLine());
         int[] arr = new int[n];
         StringTokenizer st = new StringTokenizer(br.readLine());
         for(int i=0; i<n; i++){
-            arr[i] = Integer.valueOf(st.nextToken());
+            arr[i] = Integer.parseInt(st.nextToken());
         }
 
+        // 해당 문제에서 기울기의 절대값의 최대값은 10억
         final int INF = 1000000001;
         int answer = 0;
-        
+
         for(int i=0; i<n; i++){
             int cnt = 0;
+
+            // 왼쪽 구간에서 최소 기울기의 슬로프 갱신 횟수 계산
             double minValue = (double)(INF);
             for(int j=i-1; j>=0; j--){
                 double slope = ((double)(arr[i]-arr[j]))/(i-j);
@@ -28,6 +31,7 @@ public class Main {
                 }
             }
 
+            // 오른쪽 구간에서 최대 기울기의 슬로프 갱신 횟수 계산
             double maxValue = (double)(-INF);
             for(int j=i+1; j<n; j++){
                 double slope = ((double)(arr[j]-arr[i]))/(j-i);
