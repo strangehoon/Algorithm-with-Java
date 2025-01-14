@@ -42,12 +42,13 @@ class Solution {
                     temList.add(entry.getKey());
                 }
             }
+            
             // 2명 미만의 손님으로부터 주문시 skip
             if(maxSize<2)
                 continue;
 
-            for(int i=0; i<temList.size(); i++){
-                    answer.add(temList.get(i));
+            for(int i=0, size = temList.size(); i<size; i++){
+                answer.add(temList.get(i));
             }
         }
         Collections.sort(answer);
