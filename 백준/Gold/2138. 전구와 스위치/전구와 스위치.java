@@ -10,23 +10,15 @@ public class Main {
         char[] switches = br.readLine().toCharArray();
         char[] lamps = br.readLine().toCharArray();
 
+        // boolean 배열로 변환
         boolean[] switchesA = new boolean[n];
         boolean[] switchesB = new boolean[n];
         boolean[] lampsC = new boolean[n];
 
         for(int i=0; i<n; i++){
-            if(switches[i]=='0') {
-                switchesA[i] = false;
-                switchesB[i] = false;
-            }
-            else{
-                switchesA[i] = true;
-                switchesB[i] = true;
-            }
-            if(lamps[i]=='0')
-                lampsC[i] = false;
-            else
-                lampsC[i] = true;
+            switchesA[i] = (switches[i]=='1');
+            switchesB[i] = (switches[i]=='1');
+            lampsC[i] = (lamps[i]=='1');
         }
 
         switchesB[0] = !switchesB[0];
@@ -55,10 +47,11 @@ public class Main {
         if(switchesB[n-1]!=lampsC[n-1])
             cntB = Integer.MAX_VALUE;
 
-        if(Math.min(cntA, cntB)==Integer.MAX_VALUE)
+        int result = Math.min(cntA, cntB);
+        if(result==Integer.MAX_VALUE)
             System.out.println(-1);
         else
-            System.out.println(Math.min(cntA, cntB));
+            System.out.println(result);
 
     }
 }
