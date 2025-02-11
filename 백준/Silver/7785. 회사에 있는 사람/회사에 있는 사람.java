@@ -22,10 +22,7 @@ public class Main {
             }
         }
 
-        List<String> list = new ArrayList<>();
-        for(String name : set){
-            list.add(name);
-        }
+        List<String> list = new ArrayList<>(set);
 
         Collections.sort(list, reverseOrder());
         for(String name : list){
