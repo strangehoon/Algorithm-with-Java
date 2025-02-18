@@ -5,13 +5,13 @@ public class Main {
     public static boolean flag = false;
 
     public static void dfs(String s, String t){
-        if(s.toString().equals(t)){
-            flag = true;
+
+        if(s.length()>=t.length()){
+            if(s.toString().equals(t)){
+                flag = true;
+            }
             return;
         }
-        if(s.length()>=t.length())
-            return;
-
 
         if(t.endsWith("A")){
             dfs(s, t.substring(0, t.length()-1));
@@ -26,7 +26,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        
+
         String s = br.readLine();
         String t = br.readLine();
         dfs(s, t);
