@@ -7,35 +7,38 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(br.readLine());
-        int[] stamina = new int[n+1];
-        int[] delight = new int[n+1];
+        int[] staminaArr = new int[n+1];
+        int[] delightArr = new int[n+1];
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        for(int i=1; i<=n; i++){
-            stamina[i] = Integer.parseInt(st.nextToken());
+        for(int i=0; i<n; i++){
+            staminaArr[i] = Integer.parseInt(st.nextToken());
         }
 
         st = new StringTokenizer(br.readLine());
-        for(int i=1; i<=n; i++){
-            delight[i] = Integer.parseInt(st.nextToken());
+        for(int i=0; i<n; i++){
+            delightArr[i] = Integer.parseInt(st.nextToken());
         }
 
         final int initialStamina = 100;
-        int[][] dp = new int[n+1][initialStamina];
+        int[] dp = new int[initialStamina];
 
-        for(int i=1; i<=n; i++){
-            for(int j=initialStamina-1; j>=0; j--){
-                dp[i][j] = dp[i-1][j];
-                if(j-stamina[i]>=0)
-                    dp[i][j] = Math.max(dp[i-1][j], dp[i-1][j-stamina[i]]+delight[i]);
+        // dp 수행
+        for(int i=0; i<n; i++){
+            int stamina = staminaArr[i];
+            int delight = delightArr[i];
+            for(int j=initialStamina-1; j>=stamina; j--){
+                dp[j] = Math.max(dp[j], dp[j-stamina]+delight);
             }
         }
 
+        // 최대 기쁨 출력
         int answer = 0;
         for(int i=0; i<initialStamina; i++){
-            answer = Math.max(answer, dp[n][i]);
+            answer = Math.max(answer, dp[i]);
         }
 
         System.out.println(answer);
     }
 }
+
