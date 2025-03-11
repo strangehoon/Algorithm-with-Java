@@ -1,25 +1,23 @@
+// 16:15
 import java.util.*;
-
 class Solution {
     public long solution(int[] weights) {
-        long answer = 0;
-
-        Map<Double, Integer> map = new HashMap<>();
-
-        double[] divide = new double[]{
-            1.0, 2.0/3, 1.0/2, 3.0/4
-        };
-
+        
+        HashMap<Double, Integer> map = new HashMap<>();
+        
         Arrays.sort(weights);
-        for (int weight : weights) {
-            for (double d : divide) {
-                if (map.containsKey(weight * d)) {
-                    answer += map.get(weight * d);
-                }
+        double[] torques = {(double)1/1, (double)2/3, (double)2/4, (double)3/4};
+        long answer = 0;
+        
+        for(int i=0, weightsLen=weights.length; i<weightsLen; i++){
+            for(int j=0, torqueLen=torques.length; j<torqueLen; j++){
+                double temWeight = weights[i]*torques[j];
+                answer += map.getOrDefault(temWeight, 0);
             }
-            map.put((double)weight, map.getOrDefault((double)weight, 0) + 1);
+            map.put((double)weights[i], map.getOrDefault((double)weights[i], 0)+1);
         }
-
         return answer;
     }
 }
+
+
