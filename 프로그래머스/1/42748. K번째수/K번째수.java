@@ -1,3 +1,4 @@
+// 16:10
 import java.util.*;
 class Solution {
     public int[] solution(int[] array, int[][] commands) {
@@ -17,3 +18,5 @@ class Solution {
         return answers;
     }
 }
+
+    
