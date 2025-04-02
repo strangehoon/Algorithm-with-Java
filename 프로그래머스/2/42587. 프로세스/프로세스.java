@@ -1,44 +1,30 @@
 import java.util.*;
+
 class Solution {
-    public class Process{
-        int priority;
-        int loc;
-        public Process(int priority, int loc){
-            this.priority = priority;
-            this.loc = loc;
-        }
-    }
+
     public int solution(int[] priorities, int location) {
-        Queue<Process> queue = new LinkedList<>();
-        int answer = -1;
-        int order = 0;
+        Queue<int[]> queue = new LinkedList<>();
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        
         for(int i=0; i<priorities.length; i++){
-            queue.offer(new Process(priorities[i], i));
+            queue.offer(new int[]{i, priorities[i]});
+            pq.offer(priorities[i]);
         }
         
-        while(true){
-            Process process = queue.peek();
-            int pt = process.priority;
-            int size = queue.size();
-            boolean flag = true;
-            for(int i=0; i<size; i++){
-                Process tem = queue.poll();
-                int temPt = tem.priority;
-                if(temPt>pt){
-                    flag = false;
-                }
+        int order = 1;
+        int answer = -1;
+        while(!queue.isEmpty()){
+            int[] tem = queue.poll();
+            if(tem[1]<pq.peek()){
                 queue.offer(tem);
             }
-            if(flag==true){
-                Process dummy = queue.poll();
-                order++;
-                if(dummy.loc == location){
+            else{
+                if(tem[0]==location){
                     answer = order;
                     break;
                 }
-            }
-            else if(flag==false){
-                queue.offer(queue.poll());
+                pq.poll();
+                order++;
             }
         }
         return answer;
