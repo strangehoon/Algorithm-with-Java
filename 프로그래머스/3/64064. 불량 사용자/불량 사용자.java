@@ -1,67 +1,59 @@
 import java.util.*;
-// start : 2:25
 class Solution {
-    List<List<String>> graph;
-    Set<String> result = new HashSet<>();
-    public void Recur(int dept, Set<String> set, int end){
-        if(dept==end){
-            List<String> list = new ArrayList<>();
-            for(String str : set){
-                list.add(str);
+    
+    public void dfs(String[] userId, boolean[] isUserIdBanned, List<String> userIdList, String[] bannedId, int banIdx, HashSet<String> set){
+        
+        if(banIdx==bannedId.length){
+            StringBuilder sb = new StringBuilder();
+            List<String> temList = new ArrayList<>();
+            for(String tem : userIdList)
+                temList.add(tem);
+            Collections.sort(temList);
+            
+            for(String tem : temList){
+                sb.append(tem);
             }
-            Collections.sort(list);
-            String strTem = "";
-            for(String str : list){
-                strTem += str;
-            }
-            result.add(strTem);
+            
+            set.add(sb.toString());
             return;
         }
         
-        // 
-        for(String str : graph.get(dept)){
-            if(!set.contains(str)){
-                set.add(str);
+        for(int i=0; i<userId.length; i++){
+            if(!isUserIdBanned[i] && checkString(userId[i], bannedId[banIdx])){
+                isUserIdBanned[i] = true;
+                userIdList.add(userId[i]);
+                dfs(userId, isUserIdBanned, userIdList, bannedId, banIdx+1, set);
+                isUserIdBanned[i] = false;
+                userIdList.remove(userIdList.size()-1);
             }
-            else{
-                continue;
-            }
-            Recur(dept+1, set, end);
-            set.remove(str);
         }
+        
     }
     
-    public int solution(String[] user_id, String[] banned_id) {
-        graph = new ArrayList<>();
-        for(int i=0; i<banned_id.length; i++){
-            graph.add(new ArrayList<>());
-        }
-
-        for(int i=0; i<banned_id.length; i++){
-            String banStr = banned_id[i];
-            for(int j=0; j<user_id.length; j++){
-                String userStr = user_id[j];
-                boolean flag = true;
-                if(banStr.length()!=userStr.length())
-                    continue;
-                for(int k=0; k<banStr.length(); k++){
-                    if(banStr.charAt(k)=='*')
-                        continue;
-                    else{
-                        if(banStr.charAt(k)!=userStr.charAt(k)){
-                            flag = false;
-                            break;
-                        }
-                    }
-                }
-                if(flag)
-                    graph.get(i).add(userStr);
+    public boolean checkString(String userId, String bannedId){
+        if(userId.length() != bannedId.length())
+            return false;
+        
+        int len = userId.length();
+        
+        for(int i=0; i<len; i++){
+            if(bannedId.charAt(i)=='*')
+                continue;
+            
+            else{
+                if(bannedId.charAt(i)!=userId.charAt(i))
+                    return false;
             }
         }
-
-        Set<String> set = new HashSet<>(); 
-        Recur(0, set, banned_id.length);
+        return true;
+    }
+    
+    public int solution(String[] userId, String[] bannedId) {
+        boolean[] isUserIdBanned = new boolean[userId.length];
+        List<String> userIdList = new LinkedList<>();
+        HashSet<String> set = new HashSet<>();
+        dfs(userId, isUserIdBanned, userIdList, bannedId, 0, set);
         
-        return result.size();
+        return set.size();
     }
 }
