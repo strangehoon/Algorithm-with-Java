@@ -1,70 +1,58 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
-    static int N, M;
-    static char[][] graph;
-    static int[] dx = {0, 0, 1, -1};
-    static int[] dy = {1, -1, 0, 0};
-
-    public static class Point{
-        int x;
-        int y;
-        public Point(int x, int y){
-            this.x = x;
-            this.y = y;
-        }
-    }
-
-    public static int BFS(int x, int y){
-        Queue<Point> queue = new LinkedList<>();
-        queue.offer(new Point(x, y));
-        boolean[][] visited = new boolean[N][M];
-        visited[x][y] = true;
-        int dist = 1;
-        while (!queue.isEmpty()){
-            int size = queue.size();
-            while (size-->0){
-                Point curPoint = queue.poll();
-                int curX = curPoint.x;
-                int curY = curPoint.y;
-                if (curX == N-1 && curY == M-1){
-                    return dist;
-                }
-                for(int i=0; i<4; i++){
-                    int nx = curX + dx[i];
-                    int ny = curY + dy[i];
-                    if(0<=nx && nx<N && 0<= ny && ny<M){
-                        if (graph[nx][ny]=='1' && visited[nx][ny]==false){
-                            visited[nx][ny] = true;
-                            queue.offer(new Point(nx, ny));
-                        }
-                    }
-                }
-            }
-            dist ++;
-
-        }
-        return -1;
-    }
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-        graph = new char[N][M];
-        for(int i=0; i<N; i++){
+        int n = Integer.valueOf(st.nextToken());
+        int m = Integer.valueOf(st.nextToken());
+        int[][] graph = new int[n][m];
+        for(int i=0; i<n; i++){
             String str = br.readLine();
-            for(int j=0; j<str.length(); j++){
-                graph[i][j] = str.charAt(j);
+            for(int j=0; j<m; j++){
+                char ch = str.charAt(j);
+                graph[i][j] = ch-'0';
             }
         }
+        boolean[][] visited = new boolean[n][m];
+        int[] dx = {0, 0, -1, 1};
+        int[] dy = {1, -1, 0, 0};
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(new int[]{0, 0, 1});
+        visited[0][0] = true;
 
-        bw.write(String.valueOf(BFS(0, 0)));
-        bw.flush();
-        bw.close();
-        br.close();
+        while (!queue.isEmpty()){
+            int[] pos = queue.poll();
+            int x = pos[0];
+            int y = pos[1];
+            int cnt = pos[2];
+
+            if(x==n-1 && y==m-1) {
+                System.out.println(cnt);
+                return;
+            }
+
+            for(int i=0; i<4; i++){
+                int nx = x+dx[i];
+                int ny = y+dy[i];
+
+                if(nx<0 || nx>=n || ny<0 || ny>=m)
+                    continue;
+
+                if(graph[nx][ny]==1 && !visited[nx][ny]){
+                    visited[nx][ny] = true;
+                    queue.offer(new int[]{nx, ny, cnt+1});
+                }
+            }
+        }
+        System.out.println(-1);
     }
 }
