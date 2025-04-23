@@ -1,69 +1,43 @@
-import java.util.*;
 class Solution {
-    // 동, 남, 서, 북
-    public int[] dx = {1, 0, -1, 0};
-    public int[] dy = {0, 1, 0, -1};
 
-    public class Point{
-        int x;
-        int y;
-        int cost;
-        int dir;
-        public Point(int x, int y, int cost, int dir){
-            this.x = x;
-            this.y = y;
-            this.cost = cost;
-            this.dir = dir;
-        }
-    }
- 
-    public int solution(int[][] board) {
-        int[][][] distance = new int[board.length][board[0].length][2];
-        for(int i = 0; i < board.length; i++){
-            for(int j = 0; j < board[0].length; j++){
-                for(int k=0; k<2; k++)
-                    distance[i][j][k] = Integer.MAX_VALUE;
-            }
-        }
-        distance[0][0][0] = 0;
-        distance[0][0][1] = 0;
+    public int answer = Integer.MAX_VALUE;
+    
+    public void dfs(int x, int y, int cost, int dir, int n, int[][] board, int[][][] dp){
         
-        Queue<Point> queue = new LinkedList<>();
-        queue.offer(new Point(0, 0, 0, 0));
-        queue.offer(new Point(0, 0, 0, 1));
+        if(x==n-1 && y==n-1){
+            answer = Math.min(answer, cost);
+            return;
+        }
+            
+        int[] dx = {0, 0, -1, 1};
+        int[] dy = {1, -1, 0, 0};
         
-        int result = Integer.MAX_VALUE;
-        while(!queue.isEmpty()){
-            Point now = queue.poll();
-            int nowX = now.x;
-            int nowY = now.y;
-            int nowCost = now.cost;
-            int dir = now.dir;
+        for(int i=0; i<4; i++){
+            int nx = x+dx[i];
+            int ny = y+dy[i];
             
-            if(nowX==board.length-1 && nowY==board[0].length-1){
-                result = Math.min(nowCost, result);
-            }
-            
-            if(distance[nowX][nowY][dir]<nowCost){
+            if(nx<0 || nx>=n || ny<0 || ny>=n)
                 continue;
-            }
+            if(board[nx][ny]==1)
+                continue;
             
-            for(int i=0; i<4; i++){
-                int nx = nowX+dx[i];
-                int ny = nowY+dy[i];
-                int nd = 100;
-                if(dir!=(i%2)){
-                    nd += 500;
-                }
-                if(0<=nx && nx<board.length && 0<=ny && ny<board[0].length && board[nx][ny]==0){
-                    if(distance[nx][ny][i%2]>nowCost+nd){
-                        distance[nx][ny][i%2]=nowCost+nd;
-                        queue.offer(new Point(nx, ny, nowCost+nd, i%2));
-                    }
-                }
+            if((dir==i || dir==-1) && (dp[nx][ny][i]==0 || dp[nx][ny][i] > cost+100)){
+                dp[nx][ny][i] = cost+100;
+                dfs(nx, ny, cost+100, i, n, board, dp);
             }
-        }
+            else if(dir!=i && (dp[nx][ny][i]==0 || dp[nx][ny][i] > cost+600)){
+                dp[nx][ny][i] = cost+600;
+                dfs(nx, ny, cost+600, i, n, board, dp);
+            }
+        }  
+    }
+    
+    public int solution(int[][] board) {
+        int n = board.length;
+        int[][][] dp = new int[n][n][4];
         
-        return result;
+        
+        dfs(0, 0, 0, -1, n, board, dp);
+        return answer;
     }
 }
