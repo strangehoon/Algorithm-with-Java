@@ -1,38 +1,28 @@
 import java.util.*;
 class Solution {
-    public List<Integer> solution(int[] answers) {
-        int[] first_person = {1, 2, 3, 4, 5};
-        int[] second_person = {2, 1, 2, 3, 2, 4, 2, 5};
-        int[] third_person = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
+    public int[] solution(int[] answers) {
+        int[] pick1 = {1, 2, 3, 4, 5};
+        int[] pick2 = {2, 1, 2, 3, 2, 4, 2, 5};
+        int[] pick3 = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
         
-        int first_cnt = 0;
-        int second_cnt = 0;
-        int third_cnt = 0;
-        
-        List<Integer> list = new ArrayList<>();
-        List<Integer> resultList = new ArrayList<>();
+        int[] cnts = new int[3];
         for(int i=0; i<answers.length; i++){
-            if(first_person[i%first_person.length]==answers[i]){
-                first_cnt++;
-            }
-            if(second_person[i%second_person.length]==answers[i]){
-                second_cnt++;
-            }
-            if(third_person[i%third_person.length]==answers[i]){
-                third_cnt++;
-            }
+            if(answers[i]==pick1[i%pick1.length])
+                cnts[0] ++;
+            if(answers[i]==pick2[i%pick2.length])
+                cnts[1] ++;
+            if(answers[i]==pick3[i%pick3.length])
+                cnts[2] ++;
         }
-        list.add(first_cnt);
-        list.add(second_cnt);
-        list.add(third_cnt);
+    
+        List<Integer> results = new LinkedList<>(); 
+        int maxCnt = Math.max(cnts[0], Math.max(cnts[1], cnts[2]));
         
-        int max_value = Math.max(first_cnt, Math.max(second_cnt, third_cnt));
-        for(int i=0; i<3; i++){
-            if(list.get(i)==max_value){
-                resultList.add(i+1);
-            }
+        for(int i=0; i<cnts.length; i++){
+            if(maxCnt==cnts[i])
+                results.add(i+1);
         }
         
-        return resultList;
+        return results.stream().mapToInt(i->i).sorted().toArray();
     }
 }
