@@ -1,59 +1,62 @@
 import java.util.*;
+
 class Solution {
-    // 17:30 ~ 19:00
-    
-    public String convertNumToString(int num){
-        if(num<10){
-            return "0"+String.valueOf(num);
+
+    public String calExpiredDate(String privacy, Map<Character, Integer> termInfo){
+        int year = Integer.parseInt(privacy.substring(0, 4));
+        int month = Integer.parseInt(privacy.substring(5, 7));
+        int day = Integer.parseInt(privacy.substring(8, 10));
+        int period = termInfo.get(privacy.charAt(11));
+        
+        // 하루 뺀 날짜 구하기
+        day--;
+        if(day==0){
+            month--;
+            if(month==0){
+                year--;
+                month = 12;
+            }
+            day = 28;
+        }
+        
+        // 유효기간 더하기
+        if((month+period)%12==0){
+            year += (month+period)/12 -1;
+            month = 12;
         }
         else{
-            return String.valueOf(num);
+            year += (month+period)/12;
+            month = (month+period)%12;
         }
+        
+        // 문자열로 변환
+        String newYear = String.valueOf(year);
+        String newMonth = String.valueOf(month).length()==1 ? 0+String.valueOf(month) : String.valueOf(month);
+        String newDay = String.valueOf(day).length()==1 ? 0+String.valueOf(day) : String.valueOf(day);
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append(newYear).append(".");
+        sb.append(newMonth).append(".");
+        sb.append(newDay);
+        
+        return sb.toString();
     }
     
-    public List<Integer> solution(String today, String[] terms, String[] privacies) {
+    public int[] solution(String today, String[] terms, String[] privacies) {
         
-        HashMap<Character, Integer> termsMap = new HashMap<>();
-        List<Integer> answers = new ArrayList<>();
-        
-        // 약관 정보를 map에 저장
+        Map<Character, Integer> termInfo = new HashMap<>();
         for(String term : terms){
-            String[] info = term.split(" ");
-            termsMap.put(info[0].charAt(0), Integer.parseInt(info[1]));
-        }
-        // today보다 작거나 같으면 파기
-        for(int i=1, len=privacies.length; i<=len; i++){
-            String[] privacyInfo = privacies[i-1].split(" ");
-            String[] dateInfo = privacyInfo[0].split("[.]");
-            int year = Integer.parseInt(dateInfo[0]);
-            int month = Integer.parseInt(dateInfo[1]);
-            String date = dateInfo[2];
-            
-            Character termType = privacyInfo[1].charAt(0);
-            int termMonth = termsMap.get(termType);
-            
-            StringBuilder newDate = new StringBuilder();
-            int newYear = year;
-            int newMonth = month;
-   
-            if((newMonth+termMonth)%12==0){
-                newYear += (newMonth+termMonth)/12 -1;
-                newMonth = 12;
-            } 
-            else{
-                newYear += (newMonth+termMonth)/12;
-                newMonth = (newMonth+termMonth)%12;
-            }
-            
-                
-            newDate.append(newYear).append(".").append(convertNumToString(newMonth)).append(".").append(date);
-            
-            String deadLine = newDate.toString();
-            if(deadLine.compareTo(today)<=0){
-                answers.add(i);
-            }
+            termInfo.put(term.charAt(0), Integer.valueOf(term.substring(2, term.length()))); 
         }
         
-        return answers;
+        List<Integer> answers = new ArrayList<>();
+        for(int i=1; i<=privacies.length; i++){
+            String expiredDate = calExpiredDate(privacies[i-1], termInfo);
+
+            if(today.compareTo(expiredDate)>0)
+                answers.add(i);
+        }
+        
+        return answers.stream().mapToInt(Integer::intValue).toArray();
     }
 }

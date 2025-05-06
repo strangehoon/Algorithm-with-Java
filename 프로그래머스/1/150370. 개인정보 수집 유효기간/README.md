@@ -1,10 +1,10 @@
 # [level 1] 개인정보 수집 유효기간 - 150370 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/150370) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/150370#qna) 
 
 ### 성능 요약
 
-메모리: 87.9 MB, 시간: 6.92 ms
+메모리: 73.4 MB, 시간: 6.76 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 02월 14일 18:59:33
+2025년 05월 07일 02:52:43
 
 ### 문제 설명
 
