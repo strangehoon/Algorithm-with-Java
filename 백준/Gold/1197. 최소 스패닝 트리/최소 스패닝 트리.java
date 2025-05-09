@@ -2,30 +2,9 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
 import java.util.*;
 
 public class Main {
-
-    public static int[] arr;
-    public static int result = 0;
-
-    public static int Find(int x){
-        if(arr[x]==x){
-            return x;
-        }
-        else{
-            return arr[x] = Find(arr[x]);
-        }
-    }
-
-    public static void Union(int a, int b){
-        a = Find(a);
-        b = Find(b);
-        if(a!=b){
-            arr[b] = a;
-        }
-    }
 
     public static class Edge implements Comparable<Edge>{
         int s;
@@ -39,47 +18,62 @@ public class Main {
         }
 
         @Override
-        public int compareTo(Edge E){
-            return this.v - E.v;
+        public int compareTo(Edge o) {
+            return this.v - o.v;
         }
     }
 
+    public static int find(int x){
+        if(arr[x]==x)
+            return arr[x];
+        else
+            return arr[x] = find(arr[x]);
+    }
+
+    public static void union(int a, int b){
+        a = find(a);
+        b = find(b);
+
+        if(a!=b)
+            arr[b] = a;
+    }
+
+    public static int[] arr;
 
     public static void main(String[] args) throws Exception{
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int V = Integer.valueOf(st.nextToken());
-        int E = Integer.valueOf(st.nextToken());
-        arr = new int[V+1];
+        int v = Integer.parseInt(st.nextToken());
+        int e = Integer.parseInt(st.nextToken());
+
         PriorityQueue<Edge> pq = new PriorityQueue<>();
-        for(int i=1; i<=V; i++){
+        for(int i=0; i<e; i++){
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
+            pq.offer(new Edge(a, b, c));
+        }
+
+        arr = new int[v+1];
+        for(int i=0; i<=v; i++){
             arr[i] = i;
         }
 
-        for(int i=0; i<E; i++){
-            st = new StringTokenizer(br.readLine());
-            int s = Integer.valueOf(st.nextToken());
-            int e = Integer.valueOf(st.nextToken());
-            int v = Integer.valueOf(st.nextToken());
-            pq.offer(new Edge(s, e, v));
-        }
         int cnt = 0;
-        while(cnt<V-1){
-            Edge edge = pq.poll();
-            int s = edge.s;
-            int e = edge.e;
-            int v = edge.v;
-            if(Find(s)!=Find(e)){
-                Union(s, e);
+        int answer = 0;
+        while(cnt<v-1){
+            Edge now = pq.poll();
+            if(find(now.s)!=find(now.e)) {
+                union(now.s, now.e);
                 cnt++;
-                result += v;
+                answer += now.v;
             }
         }
 
-        bw.write(String.valueOf(result));
+        bw.write(String.valueOf(answer));
         bw.flush();
         bw.close();
         br.close();
