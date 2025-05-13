@@ -1,44 +1,35 @@
 import java.util.*;
-class Solution {
 
-    public int[] solution(String[] idList, String[] reports, int k) {
+class Solution {
+    public int[] solution(String[] id_list, String[] report, int k) {
         
-        Set<Integer>[] sets = new HashSet[idList.length]; 
-        for (int i = 0, idListLen=idList.length; i<idListLen; i++) {
-            sets[i] = new HashSet<>();
-        }
-        
-        // 이름을 idx로 변환해주는 map
+        // id에 대한 인덱스 저장
         Map<String, Integer> idxMap = new HashMap<>();
-        for(int i=0, idListLen=idList.length; i<idListLen; i++){
-            idxMap.put(idList[i], i);
+        for(int i=0; i<id_list.length; i++){
+            idxMap.put(id_list[i], i);
         }
         
-        // 신고받은 횟수를 저장하는 배열
-        int[] reportCnt = new int[idList.length];
-        for(int i=0, reportsLen=reports.length; i<reportsLen; i++){
-            String[] report = reports[i].split(" ");
-            int reporterIdx = idxMap.get(report[0]);
-            int reportedIdx = idxMap.get(report[1]);
-            if(!sets[reporterIdx].contains(reportedIdx)){
-                sets[reporterIdx].add(reportedIdx);
-                reportCnt[reportedIdx] ++;    
-            }
+        // 유저별 신고한 사람들 저장
+        Map<String, Set<String>> map = new HashMap<>();
+        for(int i=0; i<id_list.length; i++){
+            map.put(id_list[i], new HashSet<>());
+        }
+        for(int i=0; i<report.length; i++){
+            String[] tem = report[i].split(" ");
+            map.get(tem[1]).add(tem[0]);
         }
         
-        // 처리 결과 메일을 받은 횟수를 담은 배열
-        int[] answers = new int[idList.length];
-        for(int i=0, idListLen1=idList.length; i<idListLen1; i++){
-            if(reportCnt[i]>=k){
-                for(int j=0, idListLen2=idList.length; j<idListLen2; j++){
-                    if(sets[j].contains(i)){
-                        answers[j]++;
-                    }
+        // 메일 받는 횟수 계산
+        int[] answers = new int[id_list.length];
+        for(int i=0; i<id_list.length; i++){
+            String reported = id_list[i];
+            Set<String> reporterSet = map.get(reported);
+            if(reporterSet.size()>=k){
+                for(String reporter : reporterSet){
+                    answers[idxMap.get(reporter)]+=1;
                 }
-                
             }
         }
-        
         return answers;
     }
 }
