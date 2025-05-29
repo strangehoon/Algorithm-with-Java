@@ -1,35 +1,36 @@
 import java.util.*;
 
 class Solution {
+
     public int solution(int[] stones, int k) {
         
-        int idx = 1;
+        int idx = 0;
         int jdx = 200000000;
-        int result = 0;
-        
+        int answer = 0;
         while(idx<=jdx){
             int mid = (idx+jdx)/2;
+            
+            int maxCnt = 0;
             int cnt = 0;
-            boolean flag = true;
             for(int i=0; i<stones.length; i++){
-                if(stones[i]<=mid)
-                    cnt++;
-                else
-                    cnt=0;
-                
-                if(cnt>=k){
-                    flag = false;
-                    break;
+                if(stones[i]-mid<0){
+                    cnt +=1;
+                    maxCnt = Math.max(maxCnt, cnt);
+                }
+                else {
+                    cnt = 0;
                 }
             }
-            if(flag){
+            
+            if(maxCnt < k){
+                answer = Math.max(answer, mid);
                 idx = mid+1;
-                result = Math.max(result, mid);
             }
-            else{
+            else if(maxCnt >= k){
                 jdx = mid-1;
             }
         }
-        return result+1;
+        
+        return answer;
     }
 }
