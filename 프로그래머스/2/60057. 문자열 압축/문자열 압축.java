@@ -1,35 +1,31 @@
 class Solution {
     public int solution(String s) {
-        int strLen = s.length();
-        int answer = strLen;
         
-        for(int i=1; i<=strLen/2; i++){
-            String temStr = s.substring(0, i);
-            int len = i;
-            int repeat = 1;
+        int sLen = s.length();
+        int answer = sLen;
     
-            for(int j=i; j<=strLen-i; j+=i){
+        for(int i=1; i<=sLen/2; i++){
+            String preStr = s.substring(0, i);
+            int cnt = 1;
+            int len = 0;
+            for(int j=i; j<=sLen-i; j+=i){
                 String curStr = s.substring(j, j+i);
-                if(temStr.equals(curStr)){
-                    if(repeat>1){
-                        repeat++;
-                        if(repeat==10 || repeat==100 || repeat == 1000)
-                            len++;
-                    }
-                    else{
-                        repeat++;
-                        len+=1;
-                    }
+                if(preStr.equals(curStr)){
+                    cnt+=1;
                 }
                 else{
-                    temStr = curStr;
-                    len += i;
-                    repeat = 1;
+                    len += cnt==1 ? 0 : String.valueOf(cnt).length(); 
+                    preStr = curStr;
+                    len += preStr.length();
+                    cnt = 1;
                 }
             }
-            len += strLen%i;
+            len += sLen%i;
+            len += cnt==1 ? 0 : String.valueOf(cnt).length(); 
+            len += preStr.length();
             answer = Math.min(answer, len);
         }
+        
         return answer;
     }
 }
