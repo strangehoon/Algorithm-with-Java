@@ -1,43 +1,29 @@
 class Solution {
     public long solution(int[] sequence) {
         
-        int[] seq1 = new int[sequence.length];
-        int[] seq2 = new int[sequence.length];
-        long max_value = 0;
+        int len = sequence.length;
+        long[] purse1 = new long[len];
+        long[] purse2 = new long[len];
         
-        for(int i=0; i<sequence.length; i++){
-            seq1[i] = sequence[i];
-            seq2[i] = sequence[i];
-            if(i%2==0)
-                seq1[i] *=-1;
-            if(i%2==1)
-                seq2[i] *=-1;
+        for(int i=0; i<len; i++){
+            purse1[i] = sequence[i]*((i%2==0) ? 1 : -1);
+            purse2[i] = sequence[i]*((i%2==1) ? 1 : -1);
         }
         
-        long sum1 = 0;
-        for(int i=0; i<seq1.length; i++){
-            int num = seq1[i];
-            if(sum1+num>=0){
-                sum1 += num;
-                max_value = Math.max(sum1, max_value);
-            }
-            else{
-                sum1 = 0;
-            }
+        long[] dp1 = new long[len];
+        long[] dp2 = new long[len];
+        
+        dp1[0] = purse1[0];
+        dp2[0] = purse2[0];
+        
+        long result = Math.max(dp1[0], dp2[0]);
+        for(int i=1; i<len; i++){
+            dp1[i] = Math.max(dp1[i-1] + purse1[i], purse1[i]);
+            dp2[i] = Math.max(dp2[i-1] + purse2[i], purse2[i]);
+            result = Math.max(result, dp1[i]);
+            result = Math.max(result, dp2[i]);
         }
         
-        long sum2 = 0;
-        for(int i=0; i<seq2.length; i++){
-            int num = seq2[i];
-            if(sum2+num>=0){
-                sum2 += num;
-                max_value = Math.max(sum2, max_value);
-            }
-            else{
-                sum2 = 0;
-            }
-        }
-    
-        return max_value;
+        return result;
     }
 }
