@@ -1,77 +1,76 @@
 import java.util.*;
 class Solution {
-    // 20:30
+    // 11:53
+    List<List<Integer>> permList = new ArrayList<>();
     
-    public class Result implements Comparable<Result>{
-        int cnt;
-        int money;
-        public Result(int cnt, int money){
-            this.cnt = cnt;
-            this.money = money;
-        }
+    void calPermutation(int idx, int len, List<Integer> list){
+        int[] arr = {10, 20, 30, 40};
         
-        @Override
-        public int compareTo(Result r){
-            if(this.cnt==r.cnt){
-                return r.money-this.money;
-            }
-            else{
-                return r.cnt-this.cnt;
-            }
-        }
-        
-    }
-    
-    public void calculateCombination(int cnt, List<Integer> list, int n, List<List<Integer>> discountPolicys){
-        int[] ratios = {10, 20, 30, 40};
-        
-        if(cnt==n){
-            discountPolicys.add(new ArrayList<>(list));
+        if(idx==len){
+            permList.add(new ArrayList<>(list));            
             return;
         }
         
         for(int i=0; i<4; i++){
-            list.add(ratios[i]);
-            calculateCombination(cnt+1, list, n, discountPolicys);
-            list.remove(cnt);
+            list.add(arr[i]);
+            calPermutation(idx+1, len, list);
+            //list.remove(idx);
+            list.remove(list.size() - 1);
         }
         
     }
     
-    public int[] solution(int[][] users, int[] emoticons) {
+    class Result implements Comparable<Result>{
+        int totalCnt;
+        int totalPrice;
         
-        List<List<Integer>> discountPolicys = new LinkedList<>();
-        List<Integer> combination = new ArrayList<>();
-        calculateCombination(0, combination, emoticons.length, discountPolicys);
-        
-        PriorityQueue<Result> pq = new PriorityQueue<>();
-        for(int i=0, len=discountPolicys.size(); i<len; i++){
-            List<Integer> discountPolicy = discountPolicys.get(i);
- 
-            int totalCnt = 0;
-            int totalMoney = 0;
-            for(int j=0, usersLen=users.length; j<usersLen; j++){
-                int stdRatio = users[j][0];
-                int stdMoney = users[j][1];
-                int temMoney = 0;
-  
-                for(int k=0, len1=discountPolicy.size(); k<len1; k++){
-                    if(stdRatio<=discountPolicy.get(k)){
-                        temMoney += (emoticons[k]*(1-discountPolicy.get(k)/100.0));
-                    }
-                }
-                if(temMoney>=stdMoney){
-                    totalCnt +=1;
-                }
-                else{
-                    totalMoney += temMoney;
-                }
-            }
-            pq.offer(new Result(totalCnt, totalMoney));
+        public Result(int totalCnt, int totalPrice){
+            this.totalCnt = totalCnt;
+            this.totalPrice = totalPrice;
         }
         
-        Result result = pq.poll();
-        int[] answer = {result.cnt, result.money};
-        return answer;
+        @Override
+        public int compareTo(Result r){
+            if(this.totalCnt==r.totalCnt)
+                return r.totalPrice-this.totalPrice;
+            else
+                return r.totalCnt - this.totalCnt; 
+        }
+    }
+    
+    public int[] solution(int[][] users, int[] emoticons) {
+        // 가능한 순열 구하기
+        calPermutation(0, emoticons.length, new ArrayList<>());
+        
+
+        
+        PriorityQueue<Result> pq = new PriorityQueue<>();
+        for(List<Integer> perm : permList){
+            int totalPrice = 0;
+            int totalCnt = 0;
+            for(int[] user : users){
+                int ratio = user[0];
+                int temPrice = user[1];
+                int curPrice = 0;
+                
+                for(int i=0; i<perm.size(); i++){
+                    if(ratio<=perm.get(i)){
+                        curPrice += emoticons[i]*(100-perm.get(i))/100;
+                    }
+                }
+                
+                if(curPrice>=temPrice)
+                    totalCnt +=1;
+                else
+                    totalPrice += curPrice;
+            }
+            pq.offer(new Result(totalCnt, totalPrice));
+        }
+        
+        int[] answers = new int[2];
+        Result r = pq.poll();
+        answers[0] = r.totalCnt;
+        answers[1] = r.totalPrice;
+        return answers;
     }
 }
