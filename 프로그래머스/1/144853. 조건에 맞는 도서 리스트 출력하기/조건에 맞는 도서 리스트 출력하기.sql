@@ -1,2 +1,6 @@
 -- 코드를 입력하세요
-SELECT BOOK_ID, SUBSTRING(PUBLISHED_DATE, 1, 10) AS PUBLISHED FROM BOOK WHERE PUBLISHED_DATE LIKE '2021%' AND CATEGORY = '인문' ORDER BY PUBLISHED_DATE;
+SELECT book_id,
+       DATE_FORMAT(published_date, '%Y-%m-%d')
+FROM book
+WHERE YEAR(published_date) = 2021 AND category = '인문'
+ORDER BY published_date
