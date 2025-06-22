@@ -1,1 +1,5 @@
-SELECT ID, EMAIL, FIRST_NAME, LAST_NAME FROM DEVELOPER_INFOS D WHERE D.SKILL_1 = "Python" OR D.SKILL_2 = "Python" OR D.SKILL_3 = "Python" ORDER BY ID;
+-- 코드를 작성해주세요
+SELECT id, email, first_name, last_name
+FROM developer_infos
+WHERE skill_1 = 'Python' || skill_2 = 'Python' || skill_3 = 'Python'
+ORDER bY id
