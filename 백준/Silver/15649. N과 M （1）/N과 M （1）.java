@@ -3,42 +3,40 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-    public static int[] arr;
-    public static boolean[] visited;
-    public static StringBuilder sb = new StringBuilder();
+    private static int[] sequence;
+    private static boolean[] used;
+    private static StringBuilder sb = new StringBuilder();
 
-    public static void sol(int n, int m, int l){
-
-        if(l==m){
-            for(int x:arr){
-                sb.append(x).append(" ");
+    private static void generate(int n, int m, int depth) {
+        if (depth == m) {
+            for (int num : sequence) {
+                sb.append(num).append(" ");
             }
             sb.append("\n");
             return;
         }
 
-        for(int i=1; i<=n; i++){
-            if(!visited[i]){
-                visited[i] = true;
-                arr[l] = i;
-                sol(n, m, l+1);
-                visited[i] = false;
+        for (int i = 1; i <= n; i++) {
+            if (!used[i]) {
+                used[i] = true;
+                sequence[depth] = i;
+                generate(n, m, depth + 1);
+                used[i] = false;
             }
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
-        arr = new int[m];
-        visited = new boolean[n+1];
 
-        sol(n, m, 0);
-        System.out.println(sb.toString());
+        sequence = new int[m];
+        used = new boolean[n + 1];
 
+        generate(n, m, 0);
+        System.out.print(sb);
     }
 }
