@@ -1,7 +1,8 @@
 import java.util.*;
+// 16:45
 
 class Solution {
-
+    // map 
     public class Message {
         String id;
         String command;
@@ -12,7 +13,7 @@ class Solution {
         }
     }
     
-    public String[] solution(String[] records) {
+    public String solution(String[] records) {
         Map<String, String> map = new HashMap<>();
         List<Message> messages = new ArrayList<>();
             
@@ -23,7 +24,7 @@ class Solution {
                 messages.add(new Message(chunk[1], "님이 들어왔습니다."));
             }
             else if(chunk[0].equals("Leave")){
-       
+                map.remove(chunk[1]);                
                 messages.add(new Message(chunk[1], "님이 나갔습니다."));
             }
             else{
@@ -31,11 +32,10 @@ class Solution {
             }
         }
         
-        String[] results = new String[messages.size()];
-        for(int i=0; i<messages.size(); i++){
-            results[i] = map.get(messages.get(i).id) + messages.get(i).command;
+        StringBuilder sb = new StringBuilder();
+        for(Message message : messages){
+            sb.append(map.get(message.id) + message.command);
         }
-        
-        return results;
+        return sb.toString();
     }
 }
