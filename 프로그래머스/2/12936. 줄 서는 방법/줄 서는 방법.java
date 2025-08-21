@@ -7,37 +7,33 @@ class Solution {
         int a = n;
         int idx = 0;
         int[] answer = new int[n];
-        boolean[] used = new boolean[n+1];
+        
+        List<Integer> nums = new ArrayList<>();
+        for(int i=1; i<=n; i++){
+            nums.add(i);
+        }
+        
+        long[] factorial = new long[n];
+        factorial[0] = 1;
+        for(int i=1; i<n; i++){
+            factorial[i] = factorial[i-1]*i;
+        }
         
         while(a-->0){
-            
-            long tem = 1;
-            for(int i=1; i<=a; i++){
-                tem *= i;
-            }
                 
-            long num = k/tem;
-            k = k%tem;
+            long x = k/factorial[a];
+            k = k%factorial[a];
             
             if(k==0){
-                num = num==-1 ? n-1-idx : num--;
-                num--;
-                if(num==-1)
-                    num = n-1-idx;
+                x--;
+                
+                if(x==-1)
+                    x = n-1-idx;
             }
-  
-            for(int i=1; i<=n; i++){
-                if(!used[i]){
-                    if(num==0){
-                        used[i] = true;
-                        answer[idx++] = i;
-                        break;
-                    } 
-                    else{
-                        num--;
-                    }
-                }
-            }
+            
+            answer[idx++] = nums.get((int)x);
+            nums.remove((int)x);
+            
         }
         return answer;
     }
