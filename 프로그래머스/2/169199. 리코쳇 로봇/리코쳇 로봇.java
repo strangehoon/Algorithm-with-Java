@@ -1,60 +1,83 @@
 import java.util.*;
 
 class Solution {
+    // 16:05
+    // 17:00
+    // bfs 최단거리 
+    public class Pos{
+        int x;
+        int y;
+        
+        public Pos(int x, int y){
+            this.x = x;
+            this.y = y;
+        }
+    }
+    
     public int solution(String[] board) {
-        int answer = -1;
-
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length(); j++) {
-                if (board[i].charAt(j) == 'R') {
-                    answer = bfs(board, i, j);
-                }
+        
+        int length = board.length;
+        int wide = board[0].length();
+        char[][] graph = new char[length][wide];
+        Pos start = null;
+        Pos end = null;
+        
+        for(int i=0; i<length; i++){
+            for(int j=0; j<wide; j++){
+                graph[i][j] = board[i].charAt(j);
+                if(graph[i][j]=='R')
+                    start = new Pos(i, j);
+                else if(graph[i][j]=='G')
+                    end = new Pos(i, j);
             }
         }
-
-        return answer;
-    }
-
-    public int bfs(String[] board, int x, int y) {
-        int n = board.length;
-        int m = board[0].length();
-
-        int[] dx = new int[]{-1, 1, 0, 0};
-        int[] dy = new int[]{0, 0, -1, 1};
-
-        Queue<int[]> queue = new LinkedList<>();
-        queue.add(new int[]{x, y});
-
-        int[][] visited = new int[n][m];
-        visited[x][y] = 1;
-
-        while (!queue.isEmpty()) {
-            int[] now = queue.poll();
-            x = now[0];
-            y = now[1];
-
-            for (int i = 0; i < 4; i++) {
-                int nx = x;
-                int ny = y;
-
-                while (nx >= 0 && nx < n && ny >= 0 && ny < m && board[nx].charAt(ny) != 'D') {
+        
+        int[] dx = {0, 0, -1, 1};
+        int[] dy = {1, -1, 0, 0};
+        
+        int[][] distance = new int[length][wide];
+        for(int i=0; i<length; i++){
+            Arrays.fill(distance[i], Integer.MAX_VALUE);
+        }
+        distance[start.x][start.y] = 0;
+        
+        Queue<Pos> queue = new LinkedList<>();
+        queue.offer(start);
+        
+        while(!queue.isEmpty()){
+            Pos now = queue.poll();
+            
+            for(int i=0; i<4; i++){
+                int nx = now.x+dx[i];
+                int ny = now.y+dy[i];
+                boolean flag = false;
+                
+                while(0<=nx && nx<length && 0<=ny && ny<wide && graph[nx][ny]!='D'){
+                    flag = true;
                     nx += dx[i];
                     ny += dy[i];
                 }
-                
                 nx -= dx[i];
                 ny -= dy[i];
                 
-                if (board[nx].charAt(ny) == 'G') {
-                    return visited[x][y];
-                }
-                
-                if (visited[nx][ny] == 0) {
-                    queue.add(new int[]{nx, ny});
-                    visited[nx][ny] = visited[x][y] + 1;
+                if(flag && distance[nx][ny] > distance[now.x][now.y] +1){
+                    distance[nx][ny] = distance[now.x][now.y] + 1;
+                    queue.offer(new Pos(nx, ny));
                 }
             }
+            
         }
-        return -1;
+        for(int i=0; i<length; i++){
+            for(int j=0; j<wide; j++){
+                if(distance[i][j]==Integer.MAX_VALUE){
+                    distance[i][j] = -1;
+                }
+            
+                //System.out.print(distance[i][j]+" ");
+            }
+            //System.out.println();
+        }
+                
+        return distance[end.x][end.y];
     }
 }
