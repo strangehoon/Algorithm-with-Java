@@ -2,18 +2,13 @@ import java.util.*;
 
 class Solution {
 
-    public class Edge implements Comparable<Edge>{
+    public class Edge {
         int vertex;
         int value;
         
         public Edge(int vertex, int value){
             this.vertex = vertex;
             this.value = value;
-        }
-        
-        @Override
-        public int compareTo(Edge e){
-            return this.value - e.value;
         }
     }
     
@@ -33,7 +28,13 @@ class Solution {
             graph.get(road[1]).add(new Edge(road[0], road[2]));
         }
         
-        PriorityQueue<Edge> pq = new PriorityQueue<>();
+        PriorityQueue<Edge> pq = new PriorityQueue<>(new Comparator<Edge>(){
+            @Override
+            public int compare(Edge e1, Edge e2){
+                return e1.value - e2.value;
+            }
+        });
+        
         pq.offer(new Edge(1, 0));
         
         while(!pq.isEmpty()){
