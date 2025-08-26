@@ -10,10 +10,7 @@ class Solution {
         
         answer = Math.max(answer, sheep);
         
-        Set<Integer> temSet = new HashSet<>();
-        for(int num : remainSet){
-            temSet.add(num);
-        }
+        Set<Integer> temSet = new HashSet<>(remainSet);
         
         for(int next : remainSet){
             if(info[next]==0){
