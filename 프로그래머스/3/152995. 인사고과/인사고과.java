@@ -1,14 +1,13 @@
-// 15:20 ~ 16:05
-// 18:15 ~
 import java.util.*;
 class Solution {
     public int solution(int[][] scores) {
         
         // 완호 점수 저장
-        int scoreA = scores[0][0];
-        int scoreB = scores[0][1];
+        int wanhoA = scores[0][0];
+        int wanhoB = scores[0][1];
+        int wanhoSum = wanhoA + wanhoB;
         
-        // 근무 태도 오름 차순, 동료 평가 점수 내림차순 정렬
+        // 근무태도 오름 차순, 동료평가 내림차순
         Arrays.sort(scores, new Comparator<>(){
             @Override
             public int compare(int[] scoreA, int[] scoreB){
@@ -52,7 +51,7 @@ class Solution {
                 tem[1] = scores[i][1];
                 pq.offer(tem);
             }
-            else if(deleted[i] && scores[i][0]==scoreA && scores[i][1]==scoreB){
+            else if(deleted[i] && scores[i][0]==wanhoA && scores[i][1]==wanhoB){
                 return -1;
             }
         }
@@ -62,7 +61,7 @@ class Solution {
         int answer = -1;
         while(!pq.isEmpty()){
             int[] score = pq.poll();
-            if(score[0]+score[1]==scoreA+scoreB){
+            if(score[0]+score[1]==wanhoSum){
                 answer = rank;
                 break;
             }
