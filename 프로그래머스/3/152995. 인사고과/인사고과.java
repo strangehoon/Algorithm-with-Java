@@ -1,76 +1,73 @@
-// 2:15
+// 15:20 ~ 16:05
+// 18:15 ~
 import java.util.*;
 class Solution {
-    
-    public class Score{
-        int idx;
-        int attitude;
-        int mate;
-        
-        public Score(int idx, int attitude, int mate){
-            this.idx = idx;
-            this.attitude = attitude;
-            this.mate = mate;
-        }
-    }
-    
     public int solution(int[][] scores) {
         
-        List<Score> list = new ArrayList<>();
-        for(int i=0, len=scores.length; i<len; i++){
-            list.add(new Score(i, scores[i][0], scores[i][1]));
-        }
-        list.sort(new Comparator<Score>(){
+        // 완호 점수 저장
+        int scoreA = scores[0][0];
+        int scoreB = scores[0][1];
+        
+        // 근무 태도 오름 차순, 동료 평가 점수 내림차순 정렬
+        Arrays.sort(scores, new Comparator<>(){
             @Override
-            public int compare(Score s1, Score s2){
-                if(s1.attitude==s2.attitude){
-                    return s2.mate-s1.mate;
+            public int compare(int[] scoreA, int[] scoreB){
+                if(scoreA[0]!=scoreB[0]){
+                    return scoreA[0]-scoreB[0];
                 }
                 else{
-                    return s1.attitude-s2.attitude;
+                    return scoreB[1] - scoreA[1];
                 }
             }
         });
         
-        Stack<Score> stack = new Stack<>();
-        for(Score score : list){
-            if(stack.isEmpty())
-                stack.push(score);
-            else{
-                while(!stack.isEmpty() && stack.peek().attitude<score.attitude && stack.peek().mate<score.mate){
-                    stack.pop();
-                }
-                stack.push(score);
-            }
-        }
-        
-        List<Score> rankList = new ArrayList<>();
-        for(Score score : stack){
-            rankList.add(score);
-        }
-        
-        rankList.sort(new Comparator<Score>(){
-            @Override
-            public int compare(Score s1, Score s2){
-                
-                if(s1.attitude+s1.mate == s2.attitude+s2.mate){
-                    return s1.idx-s2.idx;
+        // 인센티브 지급 대상 필터링
+        boolean[] deleted = new boolean[scores.length];
+        for(int i=1; i<scores.length; i++){
+            int idx = 1;
+            while(i-idx>=0){
+                int[] curScore = scores[i];
+                int[] prevScore = scores[i-idx];
+                if(curScore[0]>prevScore[0] && curScore[1]>prevScore[1]){
+                    deleted[i-idx] = true;
+                    idx++;
                 }
                 else{
-                    return (s2.attitude+s2.mate) - (s1.attitude+s1.mate);
+                    break;
                 }
             }
-        });
+        }
         
+        // pq에 저장
+        PriorityQueue<int[]> pq = new PriorityQueue<>(new Comparator<>(){
+            @Override
+            public int compare(int[] scoreA, int[] scoreB){
+                return scoreB[0]+scoreB[1] - scoreA[0] - scoreA[1];
+            }
+        });    
+        for(int i=0; i<scores.length; i++){
+            if(!deleted[i]){
+                int[] tem = new int[2];
+                tem[0] = scores[i][0];
+                tem[1] = scores[i][1];
+                pq.offer(tem);
+            }
+            else if(deleted[i] && scores[i][0]==scoreA && scores[i][1]==scoreB){
+                return -1;
+            }
+        }
+        
+        // 등수 계산
+        int rank = 1;
         int answer = -1;
-        for(int i=0,len=rankList.size(); i<len; i++){
-            Score score = rankList.get(i);
-            if(score.idx==0){
-                answer = i+1;
+        while(!pq.isEmpty()){
+            int[] score = pq.poll();
+            if(score[0]+score[1]==scoreA+scoreB){
+                answer = rank;
                 break;
             }
+            rank++;
         }
-        
         return answer;
     }
 }
