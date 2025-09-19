@@ -1,29 +1,26 @@
 class Solution {
     public int[] solution(int[] sequence, int k) {
-        int j=-1;
-        int i=-1;
-        int[] result = {5, 2000000};
-        int sum = 0;
+        int len = sequence.length;
         
-        while(true){
-            if(sum < k){
-                if(i<sequence.length-1)
-                    sum += sequence[++i];
-                else
-                    break;
+        int sum = 0;
+        int j = 0;
+        int seqLen = Integer.MAX_VALUE;
+        int[] answer = new int[2];
+        for(int i=0; i<len; i++){
+            sum += sequence[i];
+            
+            while(sum > k){
+                sum -= sequence[j++];     
             }
-            else if(sum > k){
-                sum -= sequence[++j];
+            
+            if(sum==k & seqLen>i-j){
+                answer[0] = j;
+                answer[1] = i;
+                seqLen = i-j;
             }
-            else{
-                if(result[1]-result[0]>i-j){
-                    result[1] = i;
-                    result[0] = j;
-                }
-                sum -= sequence[++j];
-            }
-        }        
-        result[0] +=1;
-        return result;
+        }
+        
+        
+        return answer;
     }
 }
