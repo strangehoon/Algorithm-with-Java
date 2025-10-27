@@ -1,47 +1,36 @@
-import java.util.*;
 class Solution {
-    int len;
-    boolean[] visited;
-    String[] words;
-    String target;
-    int result = Integer.MAX_VALUE;
+
+    public int answer;
     
-    public void DFS(String str, int cnt){
-        if(str.equals(target)){
-            result = Math.min(result, cnt);
-        }
-        for(int i=0; i<len; i++){
-            if(visited[i] ==false && CompareStr(str, words[i])){
-                visited[i] = true;
-                DFS(words[i], cnt+1);
-                visited[i] = false;
+    public void dfs(String begin, String target, boolean[] visited, int cnt, String[] words){
+        
+        if(begin.equals(target)){
+            answer = Math.min(answer, cnt);
+            return;
+        }   
+           
+        for(int i=0; i<words.length; i++){
+            
+            if(!visited[i]){
+                int sameWordCnt = 0;
+                for(int j=0; j<begin.length(); j++){
+                    if(begin.charAt(j) == words[i].charAt(j))
+                        sameWordCnt++;
+                }
+                if(sameWordCnt+1==begin.length()){
+                    visited[i]=true;
+                    dfs(words[i], target, visited, cnt+1, words);
+                    visited[i]=false;
+                }    
             }
         }
-    }
-    
-    public boolean CompareStr(String a, String b){
-        int cnt = 0;
-        for(int i=0; i<a.length(); i++){
-            if(a.charAt(i)!=b.charAt(i)){
-                cnt++;
-            }
-        }
-        if(cnt==1)
-            return true;
-        else
-            return false;
     }
     
     public int solution(String begin, String target, String[] words) {
-        len = words.length;
-        visited = new boolean[len];
-        this.words = words;
-        this.target = target;
         
-        DFS(begin, 0);
-        if(result==Integer.MAX_VALUE)
-            return 0;
-        else
-            return result;
+        boolean[] visited = new boolean[words.length];
+        answer = Integer.MAX_VALUE;
+        dfs(begin, target, visited, 0, words);
+        return answer==Integer.MAX_VALUE ? 0 : answer;
     }
 }
