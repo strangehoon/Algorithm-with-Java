@@ -1,19 +1,25 @@
-import java.util.*;
 class Solution {
     public int solution(int[] citations) {
-        Arrays.sort(citations);
-    
-        for(int h=citations.length; h>=0; h--){
+        
+        int h = 1000;
+        int answer = 0;
+        while(h>=0){
             int cnt = 0;
-            for(int i=0; i<citations.length; i++){
-                if(citations[i]>=h){
+            for(int citation : citations){
+                if(citation>=h){
                     cnt++;
-                    if(cnt>=h){
-                        return h;
-                    }
                 }
             }
+            if(cnt>=h){
+                answer = h;
+                break;
+            }
+            h--;
         }
-        return -1;
+        return answer;
     }
 }
+
+
+
+
