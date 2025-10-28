@@ -1,25 +1,25 @@
 import java.util.*;
+
 class Solution {
     boolean solution(String s) {
-        char[] arr = s.toCharArray();
-        boolean answer = true;
         Stack<Character> stack = new Stack<>();
+        
         for(int i=0; i<s.length(); i++){
-            if(arr[i]=='('){
+            char ch = s.charAt(i);
+            if(ch=='('){
                 stack.push('(');
             }
-            else if(arr[i]==')'){
-                if(!stack.isEmpty() && stack.peek()=='('){
+            else{
+                if(stack.isEmpty())
+                    return false;
+                else
                     stack.pop();
-                }
-                else{
-                    stack.push(')');
-                }
             }
         }
-        if(stack.size()>0){
-            answer = false;
-        }
-        return answer;
+        
+        if(stack.isEmpty())
+            return true;
+        else
+            return false;
     }
 }
