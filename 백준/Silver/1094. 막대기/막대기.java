@@ -1,24 +1,19 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class Main {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int x = Integer.parseInt(br.readLine());
 
-		Scanner sc = new Scanner(System.in);
+        String str = Integer.toString(x, 2);
+        int answer = 0;
+        for(int i=0; i<str.length(); i++){
+            if(str.charAt(i)=='1')
+                answer++;
+        }
 
-		int X = sc.nextInt();
-		int stick = 64;
-		int count = 0;
-
-		while (X > 0) {
-			if (stick > X) {
-				stick /= 2;
-
-			} else {
-				X -= stick;
-				count++;
-			}
-		}
-		System.out.println(count);
-	}
+        System.out.println(answer);
+    }
 }
