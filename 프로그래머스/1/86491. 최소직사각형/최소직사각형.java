@@ -1,14 +1,18 @@
 import java.util.*;
 class Solution {
     public int solution(int[][] sizes) {
-        int width = Integer.MIN_VALUE;
-        int length = Integer.MIN_VALUE;
-        for(int i=0; i<sizes.length; i++){
-            int tem_max = Math.max(sizes[i][0], sizes[i][1]);
-            int tem_min = Math.min(sizes[i][0], sizes[i][1]);
-            width = Math.max(tem_max, width);
-            length = Math.max(tem_min, length);
+        
+        int width = 0;
+        int length = 0;
+        for(int[] size : sizes){
+            int sh = Math.min(size[0], size[1]);
+            int lo = Math.max(size[0], size[1]);
+            
+            width = Math.max(lo, width);
+            length = Math.max(sh, length);
         }
+        
         return width*length;
     }
 }
+
