@@ -1,41 +1,31 @@
 import java.util.*;
-class Solution {
 
+class Solution {
     public int solution(int[][] maps) {
-        
-        int row = maps.length;
-        int col = maps[0].length;
-        boolean[][] visited = new boolean[row][col];
-        
         Queue<int[]> queue = new LinkedList<>();
-        queue.add(new int[]{0, 0, 1});
-        visited[0][0] = true;
-        
-        int[] dx = {0, 0, -1, 1};
-        int[] dy = {1, -1, 0, 0};
+        queue.offer(new int[]{0,0});
+        int n = maps.length;
+        int m = maps[0].length;
+        int[][] dist = new int[n][m];
+        dist[0][0] = 1;
+        int[] dx = {-1, 1, 0, 0};
+        int[] dy = {0, 0, -1, 1};
         
         while(!queue.isEmpty()){
-            int[] pos = queue.poll();
-            int x = pos[0];
-            int y = pos[1];
-            int cnt = pos[2];
-            
-            if(x==row-1 && y==col-1)
-                return cnt;
+            int[] cur = queue.poll();
+            if(cur[0]==n-1 && cur[1]==m-1)
+                return dist[cur[0]][cur[1]];
             
             for(int i=0; i<4; i++){
-                int nx = x + dx[i];
-                int ny = y + dy[i];
-                if(nx<0 || nx>=row || ny<0 || ny>=col)
-                    continue;
+                int nx = cur[0]+dx[i];
+                int ny = cur[1]+dy[i];
                 
-                if(!visited[nx][ny] && maps[nx][ny]==1){
-                    visited[nx][ny] = true;
-                    queue.offer(new int[]{nx, ny, cnt+1});
+                if(0<=nx && nx<n && 0<=ny && ny<m && maps[nx][ny]==1 && dist[nx][ny]==0){
+                    dist[nx][ny] = dist[cur[0]][cur[1]]+1;
+                    queue.offer(new int[]{nx, ny});
                 }
-            }    
+            }
         }
-        
         return -1;
     }
 }
