@@ -1,77 +1,64 @@
 import java.util.*;
+
 class Solution {
-    
-    public class Pos{
-        int x;
-        int y;
-        
-        public Pos(int x, int y){
-            this.x = x;
-            this.y = y;
-        }
-    }
-    
-    public int solution(int[][] rectangle, int characterX, int characterY, int itemX, int itemY) {
-        
-        int[][] dist = new int[101][101];
-        for(int i=0; i<101; i++){
-            for(int j=0; j<101; j++){
-                dist[i][j] = Integer.MAX_VALUE;
+    public boolean isLine(int[][] rectangles, int x, int y, int nx, int ny){
+        int cnt = 0;
+        for(int[] rectangle : rectangles){
+            if(rectangle[0]<=x && x<=rectangle[2] && rectangle[0]<=nx && nx<=rectangle[2] && rectangle[1]<=y && y<=rectangle[3] && rectangle[1]<=ny && ny<=rectangle[3]){
+                cnt++;
             }
         }
+        if(cnt>1)
+            return false;
         
-        int[] dx = {0, 0, 1, -1};
-        int[] dy = {1, -1, 0, 0};
+        for(int[] rectangle : rectangles){
+            if(rectangle[0]==x && rectangle[0]==nx && rectangle[1]<=y && y<=rectangle[3] && rectangle[1]<=ny && ny<=rectangle[3]){
+                return true;
+            }
+            if(rectangle[2]==x && rectangle[2]==nx && rectangle[1]<=y && y<=rectangle[3] && rectangle[1]<=ny && ny<=rectangle[3]){
+                return true;
+            }
+            if(rectangle[1]==y && rectangle[1]==ny && rectangle[0]<=x && x<=rectangle[2] && rectangle[0]<=nx && nx<=rectangle[2]){
+                return true;
+            }
+            if(rectangle[3]==y && rectangle[3]==ny && rectangle[0]<=x && x<=rectangle[2] && rectangle[0]<=nx && nx<=rectangle[2]){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public int solution(int[][] rectangles, int characterX, int characterY, int itemX, int itemY) {
         
-        Queue<Pos> queue = new LinkedList<>();
-        queue.offer(new Pos(characterX*2, characterY*2));
-        dist[characterX*2][characterY*2] = 0;
+        int[][] dist = new int[51][51];
+        for(int i=0; i<51; i++){
+            Arrays.fill(dist[i], -1);
+        }
+        dist[characterX][characterY] = 0;
+        
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(new int[]{characterX, characterY});
+        
+        int[] dx = {0, 0, -1, 1};
+        int[] dy = {-1, 1, 0, 0};
         
         while(!queue.isEmpty()){
-            Pos now = queue.poll();
-            int nowX = now.x;
-            int nowY = now.y;
-            
-            if(nowX==itemX*2 && nowY==itemY*2){
-                return dist[nowX][nowY]/2;
+            int[] cur = queue.poll();
+            if(cur[0]==itemX && cur[1]==itemY){
+                return dist[cur[0]][cur[1]];
             }
             
             for(int i=0; i<4; i++){
-                int nx = nowX+dx[i];
-                int ny = nowY+dy[i];
-                boolean flag = false;
+                int nx = cur[0]+dx[i];
+                int ny = cur[1]+dy[i];
                 
-                // 테두리 밖
-                if(2>nx || nx>100 || 2>ny || ny>100)
-                    continue;
-                if(dist[nx][ny]!=Integer.MAX_VALUE)
-                    continue;
-                
-                for(int j=0; j<rectangle.length; j++){
-                    int[] rec = rectangle[j];
+                if(0<=nx && nx<51 && 0<=ny && ny<51 && dist[nx][ny]==-1 && isLine(rectangles, cur[0], cur[1], nx, ny)){
+                    dist[nx][ny] = dist[cur[0]][cur[1]]+1;
+                    queue.offer(new int[]{nx, ny});
                     
-                    if(nx==rec[0]*2 || nx==rec[2]*2){
-                        if(rec[1]*2<=ny && ny<=rec[3]*2){
-                            flag = true;
-                        }
-                    }
-                    if(ny==rec[1]*2 || ny==rec[3]*2){
-                        if(rec[0]*2<=nx && nx<=rec[2]*2){
-                            flag = true;
-                        }
-                    }
-                    // 테두리 내부
-                    if(rec[0]*2<nx && nx<rec[2]*2 && rec[1]*2<ny && ny<rec[3]*2){
-                        flag = false;
-                        break;
-                    }
-                }
-                if(flag==true){
-                    queue.offer(new Pos(nx, ny));
-                    dist[nx][ny] = dist[nowX][nowY]+1;
                 }
             }
-        }
+        }    
         return -1;
     }
 }
