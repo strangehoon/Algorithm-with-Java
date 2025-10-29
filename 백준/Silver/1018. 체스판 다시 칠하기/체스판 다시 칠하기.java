@@ -24,13 +24,11 @@ public class Main {
                 int firstCnt = 0;
                 for(int k=i; k<i+8; k++){
                     for(int l=j; l<j+8; l++){
-                        if((k+l)%2==0){
-                            if(graph[k][l]=='B')
-                                firstCnt++;
+                        if(((k+l)%2==0) && (graph[k][l]=='B')){
+                            firstCnt++;
                         }
-                        else{
-                            if(graph[k][l]=='W')
-                                firstCnt++;
+                        else if(((k+l)%2==1) && (graph[k][l]=='W')){
+                            firstCnt++;
                         }
                     }
                 }
@@ -38,13 +36,11 @@ public class Main {
                 int secondCnt = 0;
                 for(int k=i; k<i+8; k++){
                     for(int l=j; l<j+8; l++){
-                        if((k+l)%2==0){
-                            if(graph[k][l]=='W')
-                                secondCnt++;
+                        if(((k+l)%2==1) && (graph[k][l]=='B')){
+                            secondCnt++;
                         }
-                        else{
-                            if(graph[k][l]=='B')
-                                secondCnt++;
+                        else if(((k+l)%2==0) && (graph[k][l]=='W')){
+                            secondCnt++;
                         }
                     }
                 }
