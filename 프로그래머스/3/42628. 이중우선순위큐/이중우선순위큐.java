@@ -1,42 +1,62 @@
 import java.util.*;
-class Solution {
-    
-    public int[] solution(String[] operations) {
-        int[] answer = {0 ,0};
-        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
-        PriorityQueue<Integer> minusPq = new PriorityQueue<>();
 
-        for(String str : operations){
-            if(str.charAt(0)=='I'){
-                String tem = str.substring(2, str.length());
-                int num = Integer.valueOf(tem);
+class Solution {
+    public int[] solution(String[] operations) {
+        
+        Map<Integer, Integer> map = new HashMap<>();
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        PriorityQueue<Integer> reversePq = new PriorityQueue<>(new Comparator<>(){
+            @Override
+            public int compare(Integer i1, Integer i2){
+                return i2-i1;
+            }
+        });
+        for(String operation : operations){
+            String[] strArr = operation.split(" ");
+            if(strArr[0].equals("I")){
+                int num = Integer.parseInt(strArr[1]);
+                map.put(num, map.getOrDefault(num, 0)+1);
                 pq.offer(num);
-                minusPq.offer(num);
+                reversePq.offer(num);
             }
-            else if(str.charAt(0)=='D' && str.charAt(2)=='-'){
-                if(!minusPq.isEmpty()){
-                    int num = minusPq.poll();
-                    pq.remove(num);
+            else if(strArr[1].equals("1")){
+                while(!reversePq.isEmpty()){
+                    int num = reversePq.poll();
+                    if(map.get(num)!=0){
+                        map.put(num, map.get(num)-1);
+                        break;
+                    }
                 }
             }
-            else {
-                if(!pq.isEmpty()){
+            else{
+                while(!pq.isEmpty()){
                     int num = pq.poll();
-                    minusPq.remove(num);
+                    if(map.get(num)!=0){
+                        map.put(num, map.get(num)-1);
+                        break;
+                    }
                 }
             }
         }
-        int max_value = 0;
-        int min_value = 0;
-        if(!pq.isEmpty()){
-            max_value = pq.poll();
-            minusPq.remove(max_value);    
+        int[] answer = new int[2];
+        while(!reversePq.isEmpty()){
+            int num = reversePq.poll();
+            if(map.get(num)!=0){
+                reversePq.offer(num);
+                answer[0] = num;
+                break;
+            }
         }
-        if(!minusPq.isEmpty()){
-            min_value = minusPq.poll();
+        
+        while(!pq.isEmpty()){
+            int num = pq.poll();
+            if(map.get(num)!=0){
+                pq.offer(num);
+                answer[1]= num;
+                break;
+            }
         }
-        answer[0] = max_value;
-        answer[1] = min_value;
+        
         return answer;
     }
 }
