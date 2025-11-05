@@ -1,61 +1,66 @@
-
 import java.util.*;
+
 class Solution {
     
-    public int[] parent;
+    public int[] arr;
+
+    public int find(int x){
+        if(arr[x]==x){
+            return x;
+        }
+        else{
+            return arr[x] = find(arr[x]);
+        }
+    }
+    
+    public void union(int a, int b){
+        a = find(a);
+        b = find(b);
+        if(a!=b){
+            arr[a]=b;  
+        }
+    }
+    
     public class Edge implements Comparable<Edge>{
-        int start;
-        int end;
-        int value;
+        int s;
+        int e;
+        int v;
         
-        public Edge(int start, int end, int value){
-            this.start = start;
-            this.end = end;
-            this.value = value;
+        public Edge(int s, int e, int v){
+            this.s = s;
+            this.e = e;
+            this.v = v;
         }
         
         @Override
-        public int compareTo(Edge edge){
-            return this.value-edge.value;
+        public int compareTo(Edge e){
+            return this.v-e.v;
         }
     }
-    
-    public int Find(int x){
-        if(parent[x]==x)
-            return x;
-        else{
-            return parent[x] = Find(parent[x]);
-        }
-    }
-    
-    public void Union(int a, int b){
-        a = Find(a);
-        b = Find(b);
-        if(a!=b){
-            parent[b] = a;
-        }
-    } 
     
     public int solution(int n, int[][] costs) {
-        parent = new int[n];
+        
+        arr = new int[n];
         for(int i=0; i<n; i++){
-            parent[i] = i;
+            arr[i] = i;
         }
+        
         PriorityQueue<Edge> pq = new PriorityQueue<>();
-        for(int i=0; i<costs.length; i++){
-            pq.add(new Edge(costs[i][0], costs[i][1], costs[i][2]));
+        for(int[] cost : costs){
+            pq.offer(new Edge(cost[0], cost[1], cost[2]));
         }
-        int cnt = 0;
-        int cost = 0;
-        while(cnt<n-1){
-            Edge now = pq.poll();
-            if(Find(now.start)!=Find(now.end)){
-                Union(now.start, now.end);
-                cost += now.value;
-                cnt++;
+        
+        int cnt = n-1;
+        int answer = 0;
+        while(cnt>0){
+            Edge cur = pq.poll();
+            if(find(cur.s)!=find(cur.e)){
+                union(cur.s, cur.e);
+                answer += cur.v;
+                cnt--;
             }
         }
-    
-        return cost;
+        
+        return answer;
     }
 }
