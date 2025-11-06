@@ -1,39 +1,25 @@
 import java.util.*;
 class Solution {
-    public class Route implements Comparable<Route>{
-        int start;
-        int end;
-        
-        public Route(int start, int end){
-            this.start = start;
-            this.end = end;
-        }
-        
-        @Override
-        public int compareTo(Route route){
-            return this.end - route.end;
-        }
-    }
-    
     public int solution(int[][] routes) {
-        PriorityQueue<Route> pq = new PriorityQueue<>();
-        for(int i=0; i<routes.length; i++){
-            pq.offer(new Route(routes[i][0], routes[i][1]));
-        }
-        
-        Route initRoute = pq.poll();
-        int tem = initRoute.end;
-        int cnt = 1;
-        while(!pq.isEmpty()){
-            Route route = pq.poll();
-            if(route.start<=tem)
-                continue;
-            else{
-                tem = route.end;
-                cnt++;
+        Arrays.sort(routes, new Comparator<int[]>(){
+            @Override
+            public int compare(int[] arr1, int[] arr2){
+                return arr1[1]-arr2[1];
             }
-        }
-        
-        return cnt;
+        });
+        int std = routes[0][1];
+        int answer = 1;
+        for(int i=1; i<routes.length; i++){
+            int[] route = routes[i];
+            
+            if(route[0]<=std){
+                continue;
+            }
+            else{
+                std = route[1];
+                answer ++;
+            }   
+        } 
+        return answer;
     }
 }
