@@ -1,34 +1,33 @@
 import java.util.*;
+
 class Solution {
-    
     public int[] solution(String[] gems) {
-        
         Set<String> set = new HashSet<>();
-        for(int i=0; i<gems.length; i++){
-            set.add(gems[i]);
+        for(String gem : gems){
+            set.add(gem);
         }
-        int typeCnt = set.size();
+        int size = set.size();
         
-        int minLen = Integer.MAX_VALUE;
-        int[] answers = new int[2];
         Map<String, Integer> map = new HashMap<>();
-        int j=0;
+        int j = 0;
+        int maxLen = Integer.MAX_VALUE;
+        int[] answer = new int[2];
         for(int i=0; i<gems.length; i++){
-            map.put(gems[i], map.getOrDefault(gems[i], 0)+1);
-            
-            while(map.size()==typeCnt){
-                if(i-j+1<minLen){
-                    minLen = Math.min(minLen, i-j+1);
-                    answers[0]=j+1;
-                    answers[1]=i+1;
+            String gem = gems[i];
+            map.put(gem, map.getOrDefault(gem, 0)+1);
+            while(map.size()==size){
+                if(i-j+1<maxLen){
+                    maxLen = i-j+1;
+                    answer[0] = j+1;
+                    answer[1] = i+1;
                 }
-                String tem = gems[j++];
-                map.put(tem, map.get(tem)-1);
-                if(map.get(tem)==0)
-                    map.remove(tem);
+                map.put(gems[j], map.get(gems[j])-1);
+                if(map.get(gems[j])==0){
+                    map.remove(gems[j]);
+                }
+                j++;
             }
         }
-        
-        return answers;
+        return answer;
     }
 }
