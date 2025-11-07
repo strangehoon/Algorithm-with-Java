@@ -1,48 +1,20 @@
 import java.util.*;
 class Solution {
-    public class Price {
-        int value;
-        int idx;
-        
-        public Price(int value, int idx){
-            this.value = value;
-            this.idx = idx;
-        }
-    }
-    
     public int[] solution(int[] prices) {
-        int size = prices.length;
-        int[] answer = new int[size];
-        for(int i=0; i<size; i++){
-            answer[i] = size-i-1; 
-        }
-        Stack<Price> stack = new Stack<>();
-        stack.push(new Price(prices[0], 0));
-        for(int i=1; i<size; i++){
-            int num = prices[i];
-            if(num>=stack.peek().value){
-                stack.push(new Price(num, i));
-            }
-            else{
-                boolean flag = true;
-                while(!stack.isEmpty()){
-                    Price tem = stack.peek();
-                    if(num<tem.value){
-                        stack.pop();
-                        answer[tem.idx] = i-tem.idx;
-                    }
-                    else{
-                        stack.push(new Price(num, i));
-                        flag =false;
-                        break;
-                    }
-                }
-                if(flag==true){
-                    stack.push(new Price(num, i));
-                }
-            }
-        }
         
+        prices[prices.length-1] = 0;
+        
+        Stack<int[]> stack = new Stack<>();
+        int[] answer = new int[prices.length];
+        
+        for(int i=0; i<prices.length; i++){
+            int price = prices[i];
+            while(!stack.isEmpty() && stack.peek()[1]>price){
+                int[] tmp = stack.pop();
+                answer[tmp[0]] = i-tmp[0];
+            }
+            stack.push(new int[]{i, price});
+        }
         return answer;
     }
 }
