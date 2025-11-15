@@ -1,20 +1,32 @@
 import java.util.*;
+
 class Solution {
     public int solution(int[] A, int[] B) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        
         Arrays.sort(A);
-        for(int x : B){
-            pq.offer(x);
+        Arrays.sort(B);
+        
+        int n = A.length;
+        for(int i=0; i<n/2; i++){
+            int temA = A[i];
+            int temB = B[i];
+            A[i] = A[n-1-i];
+            B[i] = B[n-1-i];
+            A[n-1-i] = temA;
+            B[n-1-i] = temB;
         }
-        int idx = 0;
-        int result = 0;
-        while(!pq.isEmpty()){
-            int num = pq.poll();
-            if(A[idx]<num){
-                result++;
-                idx++;
+        
+        int j = 0;
+        int answer = 0;
+        for(int i=0; i<n; i++){
+            while(j<n && A[j]>=B[i]){
+                j++; 
             }
+            if(j>=n)
+                break;
+            j++;
+            answer++;
         }
-        return result;
+        return answer;
     }
 }
