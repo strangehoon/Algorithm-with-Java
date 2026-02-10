@@ -6,13 +6,14 @@ class Solution {
         long answer = 0;
         
         PriorityQueue<Integer> pq = new PriorityQueue<>(
-            (w1, w2) -> w2-w1
+            (w1, w2) -> Integer.compare(w2, w1)
         );
+        
         for(int work : works){
             pq.offer(work);
         }
         
-        while(n-->0){
+        while(n-->0 && !pq.isEmpty()){
             int tem = pq.poll();
             if(tem==0){
                 break;
@@ -20,7 +21,7 @@ class Solution {
             pq.offer(tem-1);
         }
         
-        while(!pq.isEmpty() && pq.peek()>0){
+        while(!pq.isEmpty()){
             long tem = pq.poll();
             answer += tem*tem;
         }
