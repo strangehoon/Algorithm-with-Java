@@ -14,11 +14,15 @@ class Solution {
         
         while(n-->0){
             int tem = pq.poll();
+            if(tem==0){
+                break;
+            }
             pq.offer(tem-1);
         }
         
         while(!pq.isEmpty() && pq.peek()>0){
-            answer += Math.pow(pq.poll(), 2);
+            long tem = pq.poll();
+            answer += tem*tem;
         }
         
         return answer;
