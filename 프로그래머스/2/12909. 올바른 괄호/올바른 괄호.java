@@ -1,25 +1,30 @@
 import java.util.*;
-
+// 2026-02-11
+// 10:45 ~ 11:00
 class Solution {
     boolean solution(String s) {
-        Stack<Character> stack = new Stack<>();
+        boolean answer = true;
+        Deque<Character> stack = new ArrayDeque<Character>();
         
-        for(int i=0; i<s.length(); i++){
-            char ch = s.charAt(i);
+        for(char ch : s.toCharArray()){
             if(ch=='('){
-                stack.push('(');
+                stack.push(ch);
             }
-            else{
-                if(stack.isEmpty())
-                    return false;
-                else
+            else if(ch==')'){
+                if(stack.isEmpty()){
+                    answer = false;
+                    break;
+                }
+                else{
                     stack.pop();
+                }
             }
         }
         
-        if(stack.isEmpty())
-            return true;
-        else
-            return false;
+        if(!stack.isEmpty()){
+            answer = false;
+        }
+        
+        return answer;
     }
 }
