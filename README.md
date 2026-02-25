@@ -23,3 +23,15 @@ int b=100000; </br>
 int sum = a\*b; --> 오버플로우 </br>
 long sum = a\*b; --> 오버플로우 </br>
 long sum = (long)a*b; --> 정상 </br>
+
+
+</br>
+
+
+### 4. 자료구조
+
+**BFS**
+> Queue<int[]> queue = new ArrayDeque<>();
+
+**Stack**
+> Deque<Integer> stack = new ArrayDeque<>();
