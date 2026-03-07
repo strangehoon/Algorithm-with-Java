@@ -1,19 +1,33 @@
 import java.util.*;
+// 2026-03-07
+// 15:00 ~ 15:35
+
 class Solution {
-    public char[] chArr= {'A', 'E', 'I', 'O', 'U'};
-    public int order = 1;
-    public HashMap<String, Integer> map = new HashMap<>();
-    public void DFS(int cnt, String str){
-        if(cnt>=chArr.length)
+    
+    char[] chArr = new char[]{'A', 'E', 'I', 'O', 'U'};
+    int answer = 0;
+    int order = 0;
+    
+    public void dfs(StringBuilder sb, String word){
+            
+        if(sb.toString().equals(word)){
+            answer = order;
             return;
-        for(int i=0; i<chArr.length; i++){
-            map.put(str+chArr[i], order++);
-            DFS(cnt+1, str+chArr[i]);
+        }
+        
+        for(char ch : chArr){
+            if(sb.length()<5){
+                sb.append(ch);
+                order++;
+                dfs(sb, word);
+                sb.deleteCharAt(sb.length()-1);    
+            }
         }
     }
     
     public int solution(String word) {
-        DFS(0, "");
-        return map.get(word);
+        
+        dfs(new StringBuilder(), word);
+        return answer;
     }
 }
