@@ -1,4 +1,7 @@
 import java.util.*;
+// 2026-03-08
+// 18:15 ~ 18:30
+
 class Solution {
     
     public int[] solution(int n, int[][] roads, int[] sources, int destination) {
@@ -7,8 +10,7 @@ class Solution {
             graph.add(new ArrayList<>());
         }
         
-        for(int i=0; i<roads.length; i++){
-            int[] road = roads[i];
+        for(int[] road : roads){
             graph.get(road[0]).add(road[1]);
             graph.get(road[1]).add(road[0]);
         }
@@ -16,26 +18,27 @@ class Solution {
         int[] dist = new int[n+1];
         Arrays.fill(dist, -1);
         
-        Queue<Integer> queue = new LinkedList<>();
-        
-        dist[destination] =0;
+        Queue<Integer> queue = new ArrayDeque<>();
         queue.offer(destination);
+        dist[destination] = 0;
         
         while(!queue.isEmpty()){
             int cur = queue.poll();
+            int curDist = dist[cur];
             
-            for(int next: graph.get(cur)){
+            for(int next : graph.get(cur)){
                 if(dist[next]==-1){
-                    dist[next] = dist[cur]+1;
+                    dist[next] = curDist+1;
                     queue.offer(next);
                 }
             }
         }
         
-        int[] answer = new int[sources.length];
+        int[] answers = new int[sources.length];
         for(int i=0; i<sources.length; i++){
-            answer[i] = dist[sources[i]];
+            answers[i] = dist[sources[i]];
         }
-        return answer;
+        
+        return answers;
     }
 }
