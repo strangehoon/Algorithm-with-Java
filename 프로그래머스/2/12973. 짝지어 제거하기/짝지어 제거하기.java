@@ -1,20 +1,21 @@
 import java.util.*;
+// 2026-04-02
+// 16:45 ~ 16:55
+
 class Solution
 {
     public int solution(String s)
     {
-        Stack<Character> stack = new Stack<>();
-        for(Character ch : s.toCharArray()){
-            if(stack.isEmpty()){
-                stack.push(ch);
-            }
-            else if(stack.peek()==ch){
+        Deque<Character> stack = new ArrayDeque<>();
+        for(char ch : s.toCharArray()){
+            if(!stack.isEmpty() && stack.peek()==ch){
                 stack.pop();
             }
             else{
                 stack.push(ch);
             }
         }
+        
         if(stack.isEmpty()){
             return 1;
         }
