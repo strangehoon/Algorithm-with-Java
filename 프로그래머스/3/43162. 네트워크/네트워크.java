@@ -1,17 +1,18 @@
 import java.util.*;
-// 2026-02-25
-// 14:45 ~ 15:00
 
+// 20:05
 class Solution {
-    public void dfs(int cur, boolean[] visited, List<List<Integer>> graph){
-            
+    
+    public void dfs(int cur, List<List<Integer>> graph, boolean[] visited){
+        
         for(int next : graph.get(cur)){
             if(!visited[next]){
                 visited[next] = true;
-                dfs(next, visited, graph);
+                dfs(next, graph, visited);
             }
         }
-    }
+    } 
+    
     public int solution(int n, int[][] computers) {
         
         List<List<Integer>> graph = new ArrayList<>();
@@ -19,8 +20,8 @@ class Solution {
             graph.add(new ArrayList<>());
         }
         
-        for(int i=0; i<computers.length; i++){
-            for(int j=0; j<computers[0].length; j++){
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
                 if(computers[i][j]==1 && i!=j){
                     graph.get(i+1).add(j+1);
                 }
@@ -32,7 +33,7 @@ class Solution {
         for(int i=1; i<=n; i++){
             if(!visited[i]){
                 visited[i] = true;
-                dfs(i, visited, graph);
+                dfs(i, graph, visited);
                 answer++;
             }
         }
