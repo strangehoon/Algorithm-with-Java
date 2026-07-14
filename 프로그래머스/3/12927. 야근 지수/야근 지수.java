@@ -1,29 +1,30 @@
 import java.util.*;
-// 2026-02-10
-// 12:20 ~ 12:30
+
+// 2026-07-14
+// 04:50 ~ 05:00
+
 class Solution {
     public long solution(int n, int[] works) {
-        long answer = 0;
         
         PriorityQueue<Integer> pq = new PriorityQueue<>(
-            (w1, w2) -> Integer.compare(w2, w1)
+            (a, b) -> b-a
         );
-        
         for(int work : works){
             pq.offer(work);
         }
         
         while(n-->0 && !pq.isEmpty()){
-            int tem = pq.poll();
-            if(tem==0){
-                break;
-            }
-            pq.offer(tem-1);
+            pq.offer(pq.poll()-1);
         }
-        
-        while(!pq.isEmpty()){
-            long tem = pq.poll();
-            answer += tem*tem;
+
+        long answer = 0;
+        if(pq.peek()<=0){
+            return 0;
+        }
+        else{
+            while(!pq.isEmpty()){
+                answer += Math.pow(pq.poll(), 2);
+            }
         }
         
         return answer;
