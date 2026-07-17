@@ -1,50 +1,67 @@
 import java.util.*;
+// 2026/07/18
+// 00:00 ~ 
 
 class Solution {
-    public List<Integer> solution(String[] genres, int[] plays) {
+    
+    class Genre implements Comparable<Genre>{
+        String name;
+        int cnt;
         
-        Map<String, Integer> genreToSumMap = new HashMap<>();
-        Map<String, List<int[]>> genreToPlayMap = new HashMap<>();
-        for(int i=0; i<genres.length; i++){
-            genreToSumMap.put(genres[i], genreToSumMap.getOrDefault(genres[i], 0)+plays[i]);
-            if(!genreToPlayMap.containsKey(genres[i]))
-                genreToPlayMap.put(genres[i], new ArrayList<>());
+        public Genre(String name, int cnt){
+            this.name = name;
+            this.cnt = cnt;
         }
         
-        for(int i=0; i<genres.length; i++){
-            genreToPlayMap.get(genres[i]).add(new int[]{i, plays[i]});
+        public int compareTo(Genre g){
+            return Integer.compare(g.cnt, this.cnt);
+        }
+    }
+    class Song implements Comparable<Song>{
+        int idx;
+        int cnt;
+        
+        public Song(int idx, int cnt){
+            this.idx = idx;
+            this.cnt = cnt;
         }
         
-        List<Integer> sumList = new ArrayList<>();
-        for(int sum : genreToSumMap.values()){
-            sumList.add(sum);
-        }
-        Collections.sort(sumList, Collections.reverseOrder());
-
-        List<Integer> answer = new ArrayList<>();
-        
-        for(int sum : sumList){
-            for(Map.Entry<String, Integer> entry : genreToSumMap.entrySet()){
-                List<int[]> playMapList = genreToPlayMap.get(entry.getKey());
-                if(entry.getValue()==sum){
-                    Collections.sort(playMapList, new Comparator<int[]>(){
-                        @Override
-                        public int compare(int[] arr1, int[] arr2){
-                            if(arr1[1]!=arr2[1]){
-                                return arr2[1]-arr1[1];
-                            }
-                            else{
-                                return arr1[0]-arr2[0];
-                            }
-                        }
-                    });
-                    answer.add(playMapList.get(0)[0]);
-                    if(playMapList.size()>1)
-                        answer.add(playMapList.get(1)[0]);
-                }
+        public int compareTo(Song s){
+            if(this.cnt==s.cnt){
+                return Integer.compare(this.idx, s.idx);
+            }
+            else{
+                return Integer.compare(s.cnt, this.cnt);
             }
         }
+    }
+    public List<Integer> solution(String[] genres, int[] plays) {
 
+        Map<String, Integer> genreCntMap = new HashMap<>();
+        Map<String, List<Song>> songMap = new HashMap<>();
+        
+        for(int i=0; i<genres.length; i++){
+            genreCntMap.put(genres[i], genreCntMap.getOrDefault(genres[i], 0)+plays[i]);
+            songMap.putIfAbsent(genres[i], new ArrayList<>());
+            songMap.get(genres[i]).add(new Song(i, plays[i]));
+        }
+        
+        List<Genre> genreList = new ArrayList<>();
+        for(Map.Entry<String, Integer> entry : genreCntMap.entrySet()){
+            genreList.add(new Genre(entry.getKey(), entry.getValue()));
+        }
+        Collections.sort(genreList);
+        
+        List<Integer> answer = new ArrayList<>();
+        for(Genre genre : genreList){
+            List<Song> tmpList = songMap.get(genre.name);
+            Collections.sort(tmpList);
+            
+            answer.add(tmpList.get(0).idx);
+            if(tmpList.size()>1){
+                answer.add(tmpList.get(1).idx);
+            }
+        }
         return answer;
     }
 }
