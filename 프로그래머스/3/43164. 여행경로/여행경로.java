@@ -1,36 +1,28 @@
 import java.util.*;
 class Solution {
+    List<String> list;
     
-    public void dfs(boolean[] visited, String city, String[] cityArr, int idx, String[][] tickets, List<String> list){
-        if(idx==tickets.length+1){
-            StringBuilder sb = new StringBuilder();
-            for(String str : cityArr){
-                sb.append(str).append(" ");
-            }
-            list.add(sb.toString());
+    public void dfs(String airport, String[][] tickets, boolean[] visited, int cnt, String str){
+        if(cnt==visited.length+1){
+            list.add(str);
             return;
         }
-
+        
         for(int i=0; i<tickets.length; i++){
-            if(city.equals(tickets[i][0]) && !visited[i]){
+            if(tickets[i][0].equals(airport) && !visited[i]){
                 visited[i] = true;
-                cityArr[idx] = tickets[i][1];
-                dfs(visited, tickets[i][1], cityArr, idx+1, tickets, list);
+                dfs(tickets[i][1], tickets, visited, cnt+1, str+tickets[i][1]+" ");
                 visited[i] = false;
             }
         }
     }
     
     public String[] solution(String[][] tickets) {
-        
         boolean[] visited = new boolean[tickets.length];
-        String[] cityArr = new String[tickets.length+1];
-        cityArr[0] = "ICN";
-        List<String> list = new ArrayList<>();
-        dfs(visited, "ICN", cityArr, 1, tickets, list);
-        
+        list = new ArrayList<>();
+        dfs("ICN", tickets, visited, 1, "ICN ");
         Collections.sort(list);
-        String[] result = list.get(0).split(" ");
-        return result;
+        String[] results = list.get(0).split(" ");
+        return results;
     }
 }
