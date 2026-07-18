@@ -1,20 +1,37 @@
-import java.util.*;
-// 2026-02-26
-// 11:10 ~ 11:30
+// 2026/07/18
+// 16:30 ~ 
 
 class Solution {
     
-    public int minCnt = 51;
+    public int answer = Integer.MAX_VALUE;
+    public int cnt = 0;
+    public void dfs(String begin, String target, String[] words, boolean[] visited){
+        
+        if(begin.equals(target)){
+            answer = Math.min(answer, cnt);
+            return;
+        }
+        
+        for(int i=0; i<words.length; i++){
+            if(!visited[i] && cal(begin, words[i])){
+                visited[i] = true;
+                cnt++;
+                dfs(words[i], target, words, visited);
+                visited[i] = false;
+                cnt--;
+            }
+        }
+    }
     
-    public boolean convertible(String a, String b){
-        int len = a.length();
-        int cnt = 0;
-        for(int i=0; i<len; i++){
-            if(a.charAt(i)==b.charAt(i)){
+    public boolean cal(String begin, String word){
+        
+        int cnt = 0; 
+        for(int i=0; i<begin.length(); i++){
+            if(begin.charAt(i)!=word.charAt(i)){
                 cnt++;
             }
         }
-        if(len-1==cnt){
+        if(cnt==1){
             return true;
         }
         else{
@@ -22,32 +39,10 @@ class Solution {
         }
     }
     
-    public void dfs(String begin, String target, String[] words, boolean[] visited, int cnt){
-        
-        if(begin.equals(target)){
-            minCnt = Math.min(cnt, minCnt);
-            return;
-        }
-        
-        for(int i=0; i<words.length; i++){
-            if(!visited[i] && convertible(begin, words[i])){
-                visited[i] = true;
-                dfs(words[i], target, words, visited, cnt+1);
-                visited[i] = false;
-            }
-        }
-    }
-    
     public int solution(String begin, String target, String[] words) {
+        
         boolean[] visited = new boolean[words.length];
-        
-        dfs(begin, target, words, visited, 0);
-        
-        if(minCnt==51){
-            return 0;
-        }
-        else{
-            return minCnt;
-        }
+        dfs(begin, target, words, visited);
+        return answer == Integer.MAX_VALUE ? 0 : answer;
     }
 }
