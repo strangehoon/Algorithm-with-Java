@@ -9,39 +9,41 @@ class Solution {
         }
         
         for(int[] edge : edges){
-            graph.get(edge[0]).add(edge[1]);
-            graph.get(edge[1]).add(edge[0]);
+            int from = edge[0];
+            int to = edge[1];
+            graph.get(from).add(to);
+            graph.get(to).add(from);
         }
         
-        int[] distance = new int[n+1];
-        Arrays.fill(distance, -1);
-        distance[1] = 0;
+        int[] dists = new int[n+1];
+        Arrays.fill(dists, -1);
         
-        Queue<Integer> queue = new LinkedList<>();
+        Queue<Integer> queue = new ArrayDeque<>();
         queue.offer(1);
+        dists[1] = 0;
         
         while(!queue.isEmpty()){
-            int cur = queue.poll();
+            int now = queue.poll();
             
-            for(int next : graph.get(cur)){
-                if(distance[next]==-1){
-                    distance[next] = distance[cur]+1;
+            for(int next : graph.get(now)){
+                if(dists[next]==-1){
+                    dists[next] = dists[now]+1;
                     queue.offer(next);
                 }
             }
         }
         
         int maxDist = 0;
-        int cnt = 0;
-        for(int i=1; i<=n; i++){
-            if(distance[i]>maxDist){
-                maxDist = distance[i];
-                cnt = 1;
+        int answer = 0;
+        for(int dist : dists){
+            if(dist > maxDist){
+                answer = 1;
+                maxDist = dist;
             }
-            else if(distance[i]==maxDist){
-                cnt ++;
+            else if(dist==maxDist){
+                answer++;
             }
         }
-        return cnt;
+        return answer;
     }
 }
