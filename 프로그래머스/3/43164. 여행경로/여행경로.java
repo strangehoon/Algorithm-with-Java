@@ -1,28 +1,54 @@
 import java.util.*;
+
 class Solution {
-    List<String> list;
     
-    public void dfs(String airport, String[][] tickets, boolean[] visited, int cnt, String str){
-        if(cnt==visited.length+1){
+    public List<String> list = new ArrayList<>();
+    
+    public void dfs(String cur, int cnt, int goal, Map<String, List<String>> map, Map<String, boolean[]> visited, String str){
+
+        if(cnt>=goal){
             list.add(str);
             return;
         }
         
-        for(int i=0; i<tickets.length; i++){
-            if(tickets[i][0].equals(airport) && !visited[i]){
-                visited[i] = true;
-                dfs(tickets[i][1], tickets, visited, cnt+1, str+tickets[i][1]+" ");
-                visited[i] = false;
+        if(!map.containsKey(cur)){
+            return;
+        }
+        
+        for(int i=0; i<map.get(cur).size(); i++){
+            String next = map.get(cur).get(i);
+            if(!visited.get(cur)[i]){
+                visited.get(cur)[i] =true;
+                dfs(next, cnt+1, goal, map, visited, str+" "+next);
+                visited.get(cur)[i] = false;
             }
         }
     }
     
     public String[] solution(String[][] tickets) {
-        boolean[] visited = new boolean[tickets.length];
-        list = new ArrayList<>();
-        dfs("ICN", tickets, visited, 1, "ICN ");
+        
+        Map<String, List<String>> map = new HashMap<>();
+        Map<String, boolean[]> visited = new HashMap<>();
+        
+        for(String[] ticket : tickets){
+            if(map.containsKey(ticket[0])){
+                map.get(ticket[0]).add(ticket[1]);
+            }
+            else{
+                map.put(ticket[0], new ArrayList<>());
+                map.get(ticket[0]).add(ticket[1]);
+            }
+        }
+        
+        for(String key : map.keySet()){
+            visited.put(key, new boolean[map.get(key).size()]);
+        }
+        
+        dfs("ICN", 1, tickets.length+1, map, visited, "ICN");
+        
         Collections.sort(list);
-        String[] results = list.get(0).split(" ");
-        return results;
+        
+        String[] answer = list.get(0).split(" ");
+        return answer;
     }
 }
